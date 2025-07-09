@@ -1,0 +1,147 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+interface Car {
+  _id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  images: { url: string }[];
+  createdAt: string;
+}
+
+export default function AdminCars() {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
+  const fetchCars = async () => {
+    try {
+      const response = await fetch('/api/cars');
+      if (!response.ok) throw new Error('Failed to fetch cars');
+      
+      const data = await response.json();
+      setCars(data);
+    } catch (error) {
+      console.error('Error fetching cars:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (carId: string) => {
+    if (!confirm('Are you sure you want to delete this car?')) return;
+
+    try {
+      const response = await fetch(`/api/cars/${carId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete car');
+
+      // Refresh the car list
+      fetchCars();
+    } catch (error) {
+      console.error('Error deleting car:', error);
+      alert('Failed to delete car');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Manage Cars</h1>
+          <Link
+            href="/admin/cars/add"
+            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            Add New Car
+          </Link>
+        </div>
+
+        {loading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Car
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Price
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Added Date
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {cars.map(car => (
+                  <tr key={car._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="h-10 w-10 flex-shrink-0">
+                          <img
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={car.images[0]?.url || '/placeholder-car.jpg'}
+                            alt={`${car.make} ${car.model}`}
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {car.make} {car.model}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {car.year}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      ${car.price.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(car.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Link
+                        href={`/admin/cars/edit/${car._id}`}
+                        className="text-blue-600 hover:text-blue-900 mr-4"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(car._id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {cars.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No cars found. Add your first car listing!
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
