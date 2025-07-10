@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { sampleCars } from '@/data/sampleCars';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { getAllCars } from "@/services/api/carService";
 
 interface Car {
   _id: string;
@@ -24,50 +24,66 @@ interface Car {
 
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    make: '',
-    model: '',
-    minPrice: '',
-    maxPrice: '',
-    minYear: '',
-    maxYear: '',
-    minMileage: '',
-    maxMileage: '',
-    fuelType: '',
-    transmission: '',
-    bodyType: '',
+    make: "",
+    model: "",
+    minPrice: "",
+    maxPrice: "",
+    minYear: "",
+    maxYear: "",
+    minMileage: "",
+    maxMileage: "",
+    fuelType: "",
+    transmission: "",
+    bodyType: "",
   });
 
   useEffect(() => {
-    // Using sample data instead of API call
-    setCars(sampleCars);
-  }, []);
+    // Fetch cars from API instead of using sample data
+    const fetchCars = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllCars({
+          ...filters,
+          minPrice: filters.minPrice ? Number(filters.minPrice) : undefined,
+          maxPrice: filters.maxPrice ? Number(filters.maxPrice) : undefined,
+          minYear: filters.minYear ? Number(filters.minYear) : undefined,
+          maxYear: filters.maxYear ? Number(filters.maxYear) : undefined,
+          minMileage: filters.minMileage
+            ? Number(filters.minMileage)
+            : undefined,
+          maxMileage: filters.maxMileage
+            ? Number(filters.maxMileage)
+            : undefined,
+        });
+        setCars(data);
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    fetchCars();
+  }, [filters]);
+
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const filteredCars = cars.filter(car => {
-    return (
-      (!filters.make || car.make.toLowerCase().includes(filters.make.toLowerCase())) &&
-      (!filters.model || car.model.toLowerCase().includes(filters.model.toLowerCase())) &&
-      (!filters.minPrice || car.price >= parseInt(filters.minPrice)) &&
-      (!filters.maxPrice || car.price <= parseInt(filters.maxPrice)) &&
-      (!filters.minYear || car.year >= parseInt(filters.minYear)) &&
-      (!filters.maxYear || car.year <= parseInt(filters.maxYear)) &&
-      (!filters.minMileage || car.mileage >= parseInt(filters.minMileage)) &&
-      (!filters.maxMileage || car.mileage <= parseInt(filters.maxMileage)) &&
-      (!filters.fuelType || car.fuelType === filters.fuelType) &&
-      (!filters.transmission || car.transmission === filters.transmission) &&
-      (!filters.bodyType || car.bodyType === filters.bodyType)
-    );
-  });
+  // We're now filtering on the server side through the API
+  const filteredCars = cars;
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Available Cars</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Available Cars
+        </h1>
 
         {/* Filters */}
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -184,42 +200,48 @@ export default function CarsPage() {
         </div>
 
         {/* Car Listings */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCars.map(car => (
-            <Link
-              key={car._id}
-              href={`/cars/${car._id}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="aspect-w-16 aspect-h-9">
-                <img
-                  src={car.images[0]?.url}
-                  alt={`${car.make} ${car.model}`}
-                  className="object-cover w-full h-48"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {car.year} {car.make} {car.model}
-                </h3>
-                <div className="mt-2 text-sm text-gray-500">
-                  <p>Mileage: {car.mileage.toLocaleString()} miles</p>
-                  <p>Transmission: {car.transmission}</p>
-                  <p>Fuel Type: {car.fuelType}</p>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : filteredCars.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-xl text-gray-600">
+              No cars found matching your criteria.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCars.map((car) => (
+              <Link
+                key={car._id}
+                href={`/cars/${car._id}`}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <div className="aspect-w-16 aspect-h-9">
+                  <img
+                    src={car.images[0]?.url}
+                    alt={`${car.make} ${car.model}`}
+                    className="object-cover w-full h-48"
+                  />
                 </div>
-                <div className="mt-4">
-                  <span className="text-2xl font-bold text-gray-900">
-                    ${car.price.toLocaleString()}
-                  </span>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {car.year} {car.make} {car.model}
+                  </h3>
+                  <div className="mt-2 text-sm text-gray-500">
+                    <p>Mileage: {car.mileage.toLocaleString()} miles</p>
+                    <p>Transmission: {car.transmission}</p>
+                    <p>Fuel Type: {car.fuelType}</p>
+                  </div>
+                  <div className="mt-4">
+                    <span className="text-2xl font-bold text-gray-900">
+                      ${car.price.toLocaleString()}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {filteredCars.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            No cars found matching your criteria.
+              </Link>
+            ))}
           </div>
         )}
       </div>
