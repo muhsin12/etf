@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { login } from '@/services/api/authService';
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -16,19 +17,8 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Login failed');
-      }
-
+      await login({ email, password });
+      
       // Redirect to admin dashboard on successful login
       router.push('/admin/cars');
     } catch (err) {

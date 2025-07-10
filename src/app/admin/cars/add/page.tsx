@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createCar } from '@/services/api/carService';
 
 export default function AddCar() {
   const router = useRouter();
@@ -50,26 +51,15 @@ export default function AddCar() {
 
     try {
       // First, create the car entry
-      const carResponse = await fetch('/api/cars', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          year: parseInt(formData.year),
-          price: parseFloat(formData.price),
-          mileage: parseFloat(formData.mileage),
-          registrationYear: parseInt(formData.registrationYear),
-          features: formData.features.split(',').map(f => f.trim()),
-        }),
+      const car = await createCar({
+        ...formData,
+        year: parseInt(formData.year),
+        price: parseFloat(formData.price),
+        mileage: parseFloat(formData.mileage),
+        registrationYear: parseInt(formData.registrationYear),
+        features: formData.features.split(',').map(f => f.trim()),
+        images: [] // Initialize with empty array to match Car interface
       });
-
-      if (!carResponse.ok) {
-        throw new Error('Failed to create car listing');
-      }
-
-      const car = await carResponse.json();
 
       // TODO: Implement image upload functionality
       // This would involve uploading images to S3 or similar storage

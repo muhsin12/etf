@@ -1,51 +1,32 @@
-'use client';
+"use client";
 
-import { useState, useEffect, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
-
-interface CarData {
-  _id: string;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
-  engineSize: string;
-  fuelType: string;
-  transmission: string;
-  color: string;
-  description: string;
-  features: string[];
-  condition: string;
-  bodyType: string;
-  registrationYear: number;
-  vin: string;
-  images: { url: string }[];
-}
+import { useState, useEffect, FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { getCarById, updateCar, Car } from "@/services/api/carService";
 
 export default function EditCar({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<FileList | null>(null);
-  const [carData, setCarData] = useState<CarData>({
-    _id: '',
-    make: '',
-    model: '',
+  const [carData, setCarData] = useState<Car>({
+    _id: "",
+    make: "",
+    model: "",
     year: new Date().getFullYear(),
     price: 0,
     mileage: 0,
-    engineSize: '',
-    fuelType: '',
-    transmission: '',
-    color: '',
-    description: '',
+    engineSize: "",
+    fuelType: "",
+    transmission: "",
+    color: "",
+    description: "",
     features: [],
-    condition: '',
-    bodyType: '',
+    condition: "",
+    bodyType: "",
     registrationYear: new Date().getFullYear(),
-    vin: '',
-    images: []
+    vin: "",
+    images: [],
   });
 
   useEffect(() => {
@@ -54,14 +35,11 @@ export default function EditCar({ params }: { params: { id: string } }) {
 
   const fetchCarData = async () => {
     try {
-      const response = await fetch(`/api/cars/${params.id}`);
-      if (!response.ok) throw new Error('Failed to fetch car data');
-      
-      const data = await response.json();
+      const data = await getCarById(params.id);
       setCarData(data);
     } catch (error) {
-      console.error('Error fetching car data:', error);
-      alert('Failed to load car data');
+      console.error("Error fetching car data:", error);
+      alert("Failed to load car data");
     } finally {
       setLoading(false);
     }
@@ -73,24 +51,47 @@ export default function EditCar({ params }: { params: { id: string } }) {
 
     try {
       // Validate required fields
-      const requiredFields = ['make', 'model', 'year', 'price', 'mileage', 'engineSize', 
-        'fuelType', 'transmission', 'color', 'description', 'condition', 'bodyType', 
-        'registrationYear', 'vin'];
+      const requiredFields = [
+        "make",
+        "model",
+        "year",
+        "price",
+        "mileage",
+        "engineSize",
+        "fuelType",
+        "transmission",
+        "color",
+        "description",
+        "condition",
+        "bodyType",
+        "registrationYear",
+        "vin",
+      ];
 
-      const missingFields = requiredFields.filter(field => !carData[field]);
+      const missingFields = requiredFields.filter(
+        (field) => !carData[field as keyof Car]
+      );
       if (missingFields.length > 0) {
-        throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+        throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
       }
 
       const formData = new FormData();
-      
+
       // Append car data with type conversion
       Object.entries(carData).forEach(([key, value]) => {
-        if (key === 'features') {
-          formData.append(key, JSON.stringify(Array.isArray(value) ? value : []));
-        } else if (key === 'images') {
-          formData.append(key, JSON.stringify(Array.isArray(value) ? value : []));
-        } else if (['year', 'price', 'mileage', 'registrationYear'].includes(key)) {
+        if (key === "features") {
+          formData.append(
+            key,
+            JSON.stringify(Array.isArray(value) ? value : [])
+          );
+        } else if (key === "images") {
+          formData.append(
+            key,
+            JSON.stringify(Array.isArray(value) ? value : [])
+          );
+        } else if (
+          ["year", "price", "mileage", "registrationYear"].includes(key)
+        ) {
           formData.append(key, String(Number(value)));
         } else {
           formData.append(key, String(value));
@@ -100,38 +101,33 @@ export default function EditCar({ params }: { params: { id: string } }) {
       // Append new images if any
       if (images) {
         Array.from(images).forEach((image) => {
-          formData.append('newImages', image);
+          formData.append("newImages", image);
         });
       }
 
-      const response = await fetch(`/api/cars/${params.id}`, {
-        method: 'PUT',
-        body: formData,
-      });
+      const data = await updateCar(params.id, formData);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update car');
-      }
-
-      router.push('/admin/cars');
+      router.push("/admin/cars");
     } catch (error) {
-      console.error('Error updating car:', error);
-      alert(error instanceof Error ? error.message : 'Failed to update car');
+      console.error("Error updating car:", error);
+      alert(error instanceof Error ? error.message : "Failed to update car");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setCarData(prev => ({ ...prev, [name]: value }));
+    setCarData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFeaturesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const features = e.target.value.split(',').map(feature => feature.trim());
-    setCarData(prev => ({ ...prev, features }));
+    const features = e.target.value.split(",").map((feature) => feature.trim());
+    setCarData((prev) => ({ ...prev, features }));
   };
 
   if (loading) {
@@ -143,10 +139,15 @@ export default function EditCar({ params }: { params: { id: string } }) {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Edit Car</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white shadow-md rounded-lg p-6">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 bg-white shadow-md rounded-lg p-6"
+        >
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Make</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Make
+              </label>
               <input
                 type="text"
                 name="make"
@@ -158,7 +159,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Model</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Model
+              </label>
               <input
                 type="text"
                 name="model"
@@ -170,7 +173,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Year</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Year
+              </label>
               <input
                 type="number"
                 name="year"
@@ -182,7 +187,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Price</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Price
+              </label>
               <input
                 type="number"
                 name="price"
@@ -194,7 +201,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Mileage</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Mileage
+              </label>
               <input
                 type="number"
                 name="mileage"
@@ -206,7 +215,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Engine Size</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Engine Size
+              </label>
               <input
                 type="text"
                 name="engineSize"
@@ -218,7 +229,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Fuel Type</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Fuel Type
+              </label>
               <select
                 name="fuelType"
                 value={carData.fuelType}
@@ -235,7 +248,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Transmission</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Transmission
+              </label>
               <select
                 name="transmission"
                 value={carData.transmission}
@@ -250,7 +265,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Color</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Color
+              </label>
               <input
                 type="text"
                 name="color"
@@ -262,7 +279,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Body Type</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Body Type
+              </label>
               <select
                 name="bodyType"
                 value={carData.bodyType}
@@ -282,7 +301,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Registration Year</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Registration Year
+              </label>
               <input
                 type="number"
                 name="registrationYear"
@@ -294,7 +315,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">VIN</label>
+              <label className="block text-sm font-medium text-gray-700">
+                VIN
+              </label>
               <input
                 type="text"
                 name="vin"
@@ -307,7 +330,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Description
+            </label>
             <textarea
               name="description"
               value={carData.description}
@@ -319,10 +344,12 @@ export default function EditCar({ params }: { params: { id: string } }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Features (comma-separated)</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Features (comma-separated)
+            </label>
             <input
               type="text"
-              value={carData.features.join(', ')}
+              value={carData.features.join(", ")}
               onChange={handleFeaturesChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               placeholder="Air Conditioning, Bluetooth, Navigation, etc."
@@ -330,7 +357,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Condition</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Condition
+            </label>
             <select
               name="condition"
               value={carData.condition}
@@ -348,7 +377,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Current Images</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Current Images
+            </label>
             <div className="grid grid-cols-5 gap-4 mt-2">
               {carData.images.map((image, index) => (
                 <div key={index} className="relative">
@@ -363,7 +394,9 @@ export default function EditCar({ params }: { params: { id: string } }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Add New Images</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Add New Images
+            </label>
             <input
               type="file"
               onChange={(e) => setImages(e.target.files)}
@@ -371,13 +404,15 @@ export default function EditCar({ params }: { params: { id: string } }) {
               accept="image/*"
               className="mt-1 block w-full"
             />
-            <p className="mt-1 text-sm text-gray-500">You can upload up to 10 images</p>
+            <p className="mt-1 text-sm text-gray-500">
+              You can upload up to 10 images
+            </p>
           </div>
 
           <div className="flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => router.push('/admin/cars')}
+              onClick={() => router.push("/admin/cars")}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Cancel
@@ -387,7 +422,7 @@ export default function EditCar({ params }: { params: { id: string } }) {
               disabled={submitting}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              {submitting ? 'Saving...' : 'Save Changes'}
+              {submitting ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

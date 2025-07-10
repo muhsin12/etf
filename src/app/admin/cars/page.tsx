@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-interface Car {
-  _id: string;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  images: { url: string }[];
-  createdAt: string;
-}
+import { getAllCars, deleteCar, Car } from '@/services/api/carService';
 
 export default function AdminCars() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -23,10 +14,7 @@ export default function AdminCars() {
 
   const fetchCars = async () => {
     try {
-      const response = await fetch('/api/cars');
-      if (!response.ok) throw new Error('Failed to fetch cars');
-      
-      const data = await response.json();
+      const data = await getAllCars();
       setCars(data);
     } catch (error) {
       console.error('Error fetching cars:', error);
@@ -39,12 +27,8 @@ export default function AdminCars() {
     if (!confirm('Are you sure you want to delete this car?')) return;
 
     try {
-      const response = await fetch(`/api/cars/${carId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) throw new Error('Failed to delete car');
-
+      await deleteCar(carId);
+      
       // Refresh the car list
       fetchCars();
     } catch (error) {
@@ -113,7 +97,7 @@ export default function AdminCars() {
                       ${car.price.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(car.createdAt).toLocaleDateString()}
+                      {car.createdAt ? new Date(car.createdAt).toLocaleDateString() : 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link

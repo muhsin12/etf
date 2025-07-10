@@ -2,25 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { sampleCars } from '@/data/sampleCars';
-
-interface Car {
-  _id: string;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
-  engineSize: string;
-  fuelType: string;
-  transmission: string;
-  color: string;
-  description: string;
-  features: string[];
-  condition: string;
-  bodyType: string;
-  images: { url: string }[];
-}
+import { getCarById, Car } from '@/services/api/carService';
+import { submitEnquiry } from '@/services/api/enquiryService';
 
 interface EnquiryForm {
   name: string;
@@ -46,11 +29,16 @@ export default function CarDetailsPage() {
   }>({ loading: false, error: null, success: false });
 
   useEffect(() => {
-    // Find car from sample data instead of API call
-    const foundCar = sampleCars.find(c => c._id === id);
-    if (foundCar) {
-      setCar(foundCar);
-    }
+    const fetchCarData = async () => {
+      try {
+        const data = await getCarById(id as string);
+        setCar(data);
+      } catch (error) {
+        console.error('Error fetching car data:', error);
+      }
+    };
+    
+    fetchCarData();
   }, [id]);
 
   const handleEnquirySubmit = async (e: React.FormEvent) => {
@@ -58,18 +46,10 @@ export default function CarDetailsPage() {
     setSubmitStatus({ loading: true, error: null, success: false });
 
     try {
-      const response = await fetch('/api/enquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          carId: id,
-          ...enquiryForm,
-        }),
+      await submitEnquiry({
+        carId: id as string,
+        ...enquiryForm,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit enquiry');
-      }
 
       setSubmitStatus({ loading: false, error: null, success: true });
       setShowEnquiryForm(false);
