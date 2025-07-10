@@ -185,7 +185,7 @@ export default function CarFormModal({
                 value={formData.make}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -199,7 +199,7 @@ export default function CarFormModal({
                 value={formData.model}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -215,7 +215,7 @@ export default function CarFormModal({
                 required
                 min="1900"
                 max={new Date().getFullYear() + 1}
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -231,7 +231,7 @@ export default function CarFormModal({
                 required
                 min="0"
                 step="0.01"
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -246,7 +246,7 @@ export default function CarFormModal({
                 onChange={handleInputChange}
                 required
                 min="0"
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -260,7 +260,7 @@ export default function CarFormModal({
                 value={formData.engineSize}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -273,7 +273,7 @@ export default function CarFormModal({
                 value={formData.fuelType}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               >
                 <option value="Petrol">Petrol</option>
                 <option value="Diesel">Diesel</option>
@@ -292,7 +292,7 @@ export default function CarFormModal({
                 value={formData.transmission}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               >
                 <option value="Manual">Manual</option>
                 <option value="Automatic">Automatic</option>
@@ -310,7 +310,7 @@ export default function CarFormModal({
                 value={formData.color}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -323,7 +323,7 @@ export default function CarFormModal({
                 value={formData.condition}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               >
                 <option value="Excellent">Excellent</option>
                 <option value="Very Good">Very Good</option>
@@ -342,7 +342,7 @@ export default function CarFormModal({
                 value={formData.bodyType}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               >
                 <option value="Sedan">Sedan</option>
                 <option value="SUV">SUV</option>
@@ -367,7 +367,7 @@ export default function CarFormModal({
                 required
                 min="1900"
                 max={new Date().getFullYear()}
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
 
@@ -381,7 +381,7 @@ export default function CarFormModal({
                 value={formData.vin}
                 onChange={handleInputChange}
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               />
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function CarFormModal({
                   : formData.features.join(", ")
               }
               onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
               placeholder="Air Conditioning, Bluetooth, Navigation, etc."
             />
           </div>
@@ -414,7 +414,7 @@ export default function CarFormModal({
               onChange={handleInputChange}
               required
               rows={4}
-              className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-md px-4 py-2 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200 hover:border-blue-400"
             />
           </div>
 
@@ -422,16 +422,26 @@ export default function CarFormModal({
             <label className="block text-sm font-medium text-gray-700">
               Images
             </label>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageChange}
-              className="mt-1 block w-full"
-            />
-            <p className="mt-1 text-sm text-gray-500">
-              You can upload up to 10 images
-            </p>
+            <label className="mt-1 flex items-center justify-center px-6 py-3 border-2 border-gray-300 border-dashed rounded-md shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 cursor-pointer">
+              <div className="space-y-1 text-center">
+                <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="flex justify-center text-sm text-gray-600">
+                   <span className="relative font-medium text-blue-600 hover:text-blue-700 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                     Click to browse for car images
+                   </span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="sr-only"
+                  />
+                </div>
+                <p className="text-xs text-gray-500">Upload up to 10 car images (PNG, JPG, GIF formats)</p>
+              </div>
+            </label>
           </div>
 
           {carToEdit && carToEdit.images.length > 0 && (
@@ -457,14 +467,14 @@ export default function CarFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-md shadow-md hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 border-2 border-transparent rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-all duration-200 hover:shadow-lg"
             >
               {loading ? "Saving..." : carToEdit ? "Update Car" : "Add Car"}
             </button>
