@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createCar } from '@/services/api/carService';
+import { uploadImages } from '@/services/api/imageService';
 
 export default function AddCar() {
   const router = useRouter();
@@ -50,7 +51,20 @@ export default function AddCar() {
     setLoading(true);
 
     try {
-      // First, create the car entry
+      // Upload images first if there are any
+      let uploadedImages = [];
+      if (images.length > 0) {
+        try {
+          uploadedImages = await uploadImages(images);
+          console.log('Images uploaded successfully:', uploadedImages);
+        } catch (error) {
+          console.error('Error uploading images:', error);
+          alert('Failed to upload images');
+          // Continue with car creation even if image upload fails
+        }
+      }
+
+      // Create the car entry with uploaded images
       const car = await createCar({
         ...formData,
         year: parseInt(formData.year),
@@ -58,12 +72,8 @@ export default function AddCar() {
         mileage: parseFloat(formData.mileage),
         registrationYear: parseInt(formData.registrationYear),
         features: formData.features.split(',').map(f => f.trim()),
-        images: [] // Initialize with empty array to match Car interface
+        images: uploadedImages // Use the uploaded images
       });
-
-      // TODO: Implement image upload functionality
-      // This would involve uploading images to S3 or similar storage
-      // and updating the car document with image URLs
 
       router.push('/admin/cars');
     } catch (error) {

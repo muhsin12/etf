@@ -3,3 +3,4 @@
 export * from './carService';
 export * from './enquiryService';
 export * from './authService';
+export * from './imageService';

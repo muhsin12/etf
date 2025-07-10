@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
 import crypto from 'crypto';
+import { BlobServiceClient } from '@azure/storage-blob';
 
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION!,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
+// Determine if we're in development mode
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+// Local storage configuration
+const LOCAL_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
+const LOCAL_UPLOAD_URL_PREFIX = '/uploads';
+
+// Azure configuration (for production)
+const AZURE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const AZURE_CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER_NAME || 'cars';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,32 +34,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const uploadPromises = files.map(async (file) => {
-      // Generate a unique filename
-      const fileExtension = file.name.split('.').pop();
-      const randomName = crypto.randomBytes(16).toString('hex');
-      const fileName = `${randomName}.${fileExtension}`;
-
-      // Convert file to buffer
-      const buffer = Buffer.from(await file.arrayBuffer());
-
-      // Upload to S3
-      const command = new PutObjectCommand({
-        Bucket: process.env.AWS_S3_BUCKET!,
-        Key: `cars/${fileName}`,
-        Body: buffer,
-        ContentType: file.type,
-      });
-
-      await s3Client.send(command);
-
-      // Return the URL of the uploaded file
-      return {
-        url: `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/cars/${fileName}`,
-      };
-    });
-
-    const uploadedFiles = await Promise.all(uploadPromises);
+    // Choose upload method based on environment
+    let uploadedFiles;
+    if (isDevelopment) {
+      uploadedFiles = await uploadToLocalStorage(files);
+    } else {
+      uploadedFiles = await uploadToAzure(files);
+    }
 
     return NextResponse.json(uploadedFiles);
   } catch (error) {
@@ -64,4 +50,71 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+async function uploadToLocalStorage(files: File[]) {
+  // Ensure upload directory exists
+  try {
+    await mkdir(LOCAL_UPLOAD_DIR, { recursive: true });
+  } catch (error) {
+    console.error('Error creating upload directory:', error);
+  }
+
+  const uploadPromises = files.map(async (file) => {
+    // Generate a unique filename
+    const fileExtension = file.name.split('.').pop();
+    const randomName = crypto.randomBytes(16).toString('hex');
+    const fileName = `${randomName}.${fileExtension}`;
+    const filePath = path.join(LOCAL_UPLOAD_DIR, fileName);
+    
+    // Convert file to buffer and save to disk
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filePath, buffer);
+    
+    // Return the URL of the uploaded file
+    return {
+      url: `${LOCAL_UPLOAD_URL_PREFIX}/${fileName}`,
+      key: fileName
+    };
+  });
+
+  return Promise.all(uploadPromises);
+}
+
+async function uploadToAzure(files: File[]) {
+  if (!AZURE_CONNECTION_STRING) {
+    throw new Error('Azure Storage connection string is not configured');
+  }
+
+  const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_CONNECTION_STRING);
+  const containerClient = blobServiceClient.getContainerClient(AZURE_CONTAINER_NAME);
+  
+  // Create container if it doesn't exist
+  await containerClient.createIfNotExists({
+    access: 'blob' // Public read access for blobs only
+  });
+
+  const uploadPromises = files.map(async (file) => {
+    // Generate a unique filename
+    const fileExtension = file.name.split('.').pop();
+    const randomName = crypto.randomBytes(16).toString('hex');
+    const fileName = `${randomName}.${fileExtension}`;
+    
+    // Get a block blob client
+    const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+    
+    // Convert file to buffer and upload
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await blockBlobClient.upload(buffer, buffer.length, {
+      blobHTTPHeaders: { blobContentType: file.type }
+    });
+    
+    // Return the URL of the uploaded file
+    return {
+      url: blockBlobClient.url,
+      key: fileName
+    };
+  });
+
+  return Promise.all(uploadPromises);
 }

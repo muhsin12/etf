@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createCar, updateCar, Car } from "@/services/api/carService";
+import { uploadImages } from "@/services/api/imageService";
 
 interface CarFormModalProps {
   isOpen: boolean;
@@ -83,6 +84,19 @@ export default function CarFormModal({
     setLoading(true);
 
     try {
+      // Upload images first if there are any
+      let uploadedImages: any[] = [];
+      if (images.length > 0) {
+        try {
+          uploadedImages = await uploadImages(images);
+          console.log("Images uploaded successfully:", uploadedImages);
+        } catch (error) {
+          console.error("Error uploading images:", error);
+          alert("Failed to upload images");
+          // Continue with car creation/update even if image upload fails
+        }
+      }
+
       if (carToEdit) {
         // Update existing car
         const formDataObj = new FormData();
@@ -96,7 +110,11 @@ export default function CarFormModal({
                 : value;
             formDataObj.append(key, JSON.stringify(featuresArray));
           } else if (key === "images" && Array.isArray(value)) {
-            formDataObj.append(key, JSON.stringify(value));
+            // Keep existing images
+            const existingImages = Array.isArray(value) ? value : [];
+            // Combine with newly uploaded images
+            const allImages = [...existingImages, ...uploadedImages];
+            formDataObj.append(key, JSON.stringify(allImages));
           } else if (
             ["year", "price", "mileage", "registrationYear"].includes(key)
           ) {
@@ -105,13 +123,6 @@ export default function CarFormModal({
             formDataObj.append(key, String(value));
           }
         });
-
-        // Append new images if any
-        if (images.length > 0) {
-          images.forEach((image, index) => {
-            formDataObj.append(`image-${index}`, image);
-          });
-        }
 
         await updateCar(carToEdit._id, formDataObj);
       } else {
@@ -126,13 +137,9 @@ export default function CarFormModal({
             typeof formData.features === "string"
               ? formData.features.split(",").map((f: string) => f.trim())
               : formData.features,
-          images: [], // Initialize with empty array to match Car interface
+          images: uploadedImages as string[], // Use uploaded images
         });
       }
-
-      // TODO: Implement image upload functionality
-      // This would involve uploading images to S3 or similar storage
-      // and updating the car document with image URLs
 
       onSuccess();
       onClose();
@@ -424,13 +431,24 @@ export default function CarFormModal({
             </label>
             <label className="mt-1 flex items-center justify-center px-6 py-3 border-2 border-gray-300 border-dashed rounded-md shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 cursor-pointer">
               <div className="space-y-1 text-center">
-                <svg className="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  className="mx-auto h-8 w-8 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
                 <div className="flex justify-center text-sm text-gray-600">
-                   <span className="relative font-medium text-blue-600 hover:text-blue-700 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                     Click to browse for car images
-                   </span>
+                  <span className="relative font-medium text-blue-600 hover:text-blue-700 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                    Click to browse for car images
+                  </span>
                   <input
                     type="file"
                     multiple
@@ -439,7 +457,9 @@ export default function CarFormModal({
                     className="sr-only"
                   />
                 </div>
-                <p className="text-xs text-gray-500">Upload up to 10 car images (PNG, JPG, GIF formats)</p>
+                <p className="text-xs text-gray-500">
+                  Upload up to 10 car images (PNG, JPG, GIF formats)
+                </p>
               </div>
             </label>
           </div>

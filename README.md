@@ -9,7 +9,7 @@ A modern web application for ETF Garage's second-hand car sales business, built 
 - **Car Details**: View comprehensive information about each car
 - **Enquiry System**: Submit enquiries about specific cars
 - **Admin Dashboard**: Manage car listings and handle customer enquiries
-- **Image Management**: Upload and manage multiple car images using AWS S3
+- **Image Management**: Upload and manage multiple car images (local storage in development, Azure Blob Storage in production)
 - **Responsive Design**: Mobile-friendly interface
 
 ## Tech Stack
@@ -17,7 +17,9 @@ A modern web application for ETF Garage's second-hand car sales business, built 
 - **Frontend**: Next.js 13+, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes
 - **Database**: MongoDB with Mongoose
-- **Image Storage**: AWS S3
+- **Image Storage**: 
+  - Development: Local file system
+  - Production: Azure Blob Storage
 - **Authentication**: JWT with HTTP-only cookies
 - **Styling**: Tailwind CSS
 
@@ -25,7 +27,7 @@ A modern web application for ETF Garage's second-hand car sales business, built 
 
 - Node.js 16.8 or later
 - MongoDB instance
-- AWS S3 bucket and credentials
+- Azure Storage account and container (for production)
 - Git
 
 ## Setup Instructions
@@ -48,64 +50,40 @@ A modern web application for ETF Garage's second-hand car sales business, built 
      ```
    - Update the `.env.local` file with your configuration values
 
-4. **Database Setup**
-   - Ensure MongoDB is running
-   - The application will automatically create required collections
+## Image Storage Configuration
 
-5. **AWS S3 Setup**
-   - Create an S3 bucket
-   - Configure bucket permissions for public read access
-   - Update AWS credentials in `.env.local`
+### Development Mode
 
-6. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+In development mode, images are stored locally in the `/public/uploads` directory. These images are accessible via the `/uploads` URL path.
 
-7. **Access the application**
-   - Website: [http://localhost:3000](http://localhost:3000)
-   - Admin Dashboard: [http://localhost:3000/admin](http://localhost:3000/admin)
+### Production Mode
 
-## Project Structure
+In production, images are stored in Azure Blob Storage. You need to configure the following environment variables:
 
-```
-src/
-├── app/                    # Next.js 13+ app directory
-│   ├── admin/             # Admin dashboard pages
-│   ├── api/               # API routes
-│   ├── cars/              # Car listing pages
-│   └── page.tsx           # Homepage
-├── components/            # Reusable components
-├── lib/                   # Utility functions and configurations
-├── models/                # Mongoose models
-└── middleware.ts          # Authentication middleware
+- `AZURE_STORAGE_CONNECTION_STRING`: Your Azure Storage connection string
+- `AZURE_STORAGE_CONTAINER_NAME`: The name of your Azure Storage container (defaults to 'cars')
+
+## Running the Application
+
+### Development
+
+```bash
+npm run dev
 ```
 
-## Admin Features
+The application will be available at http://localhost:3000
 
-- Secure admin login
-- Manage car listings (add, edit, delete)
-- Upload multiple car images
-- Handle customer enquiries
-- Track enquiry status
+### Production Build
 
-## Security Features
+```bash
+npm run build
+npm start
+```
 
-- JWT-based authentication
-- HTTP-only cookies
-- Protected admin routes
-- Secure image upload
-- Input validation
-- Environment variable protection
+## Admin Access
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+To access the admin dashboard, navigate to `/admin` and log in with the credentials specified in your `.env` file.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[MIT](LICENSE)
