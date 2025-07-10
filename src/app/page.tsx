@@ -1,34 +1,47 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { getAllCars } from "@/services/api/carService";
+import CarImageCarousel from "@/components/CarImageCarousel";
+
+interface Car {
+  _id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  engineSize: string;
+  fuelType: string;
+  transmission: string;
+  color: string;
+  description: string;
+  features: string[];
+  condition: string;
+  bodyType: string;
+  images: { url: string }[];
+}
 
 export default function Home() {
-  // Sample car data - in a real app, this would come from a database
-  const cars = [
-    {
-      id: 1,
-      name: "Toyota Camry 2020",
-      price: "$18,900",
-      mileage: "45,000 miles",
-      image:
-        "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&q=80&w=200&h=150",
-    },
-    {
-      id: 2,
-      name: "Honda Accord 2019",
-      price: "$17,900",
-      mileage: "52,000 miles",
-      image:
-        "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&q=80&w=200&h=150",
-    },
-    {
-      id: 3,
-      name: "Ford Fusion 2021",
-      price: "$20,500",
-      mileage: "32,000 miles",
-      image:
-        "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&q=80&w=200&h=150",
-    },
-    // Add more cars as needed
-  ];
+  const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllCars();
+        setFeaturedCars(data.slice(0, 3)); // Get only the latest 3 cars for featured section
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -48,38 +61,72 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Featured Cars Section */}
+      {/* Latest Cars Section */}
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-8">
-          Featured Vehicles
+          Latest Vehicles
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {cars.map((car) => (
-            <div
-              key={car.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden"
-            >
-              <img
-                src={car.image}
-                alt={car.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {car.name}
-                </h3>
-                <div className="flex justify-between text-gray-600 mb-4">
-                  <span>{car.price}</span>
-                  <span>{car.mileage}</span>
-                </div>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
-                  View Details
-                </button>
-              </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : featuredCars.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-xl text-gray-600">
+              No featured cars available at the moment.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid md:grid-cols-3 gap-8">
+              {featuredCars.map((car) => (
+                <Link
+                  key={car._id}
+                  href={`/cars/${car._id}`}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                  onClick={(e) => {
+                    // Allow navigation only if the click is not on the carousel
+                    if ((e.target as Element).closest(".carousel-container")) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <div className="aspect-w-16 aspect-h-9">
+                    <CarImageCarousel
+                      images={car.images}
+                      altText={`${car.make} ${car.model}`}
+                      className="h-48"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {car.year} {car.make} {car.model}
+                    </h3>
+                    <div className="mt-2 text-sm text-gray-500">
+                      <p>Mileage: {car.mileage.toLocaleString()} miles</p>
+                      <p>Transmission: {car.transmission}</p>
+                      <p>Fuel Type: {car.fuelType}</p>
+                    </div>
+                    <div className="mt-4">
+                      <span className="text-2xl font-bold text-gray-900">
+                        ${car.price.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
-          ))}
-        </div>
+            <div className="mt-10 text-center">
+              <Link
+                href="/cars"
+                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300"
+              >
+                View All Available Cars
+              </Link>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Why Choose Us Section */}

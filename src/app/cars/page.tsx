@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAllCars } from "@/services/api/carService";
+import CarImageCarousel from "@/components/CarImageCarousel";
 
 interface Car {
   _id: string;
@@ -217,12 +218,18 @@ export default function CarsPage() {
                 key={car._id}
                 href={`/cars/${car._id}`}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                onClick={(e) => {
+                  // Allow navigation only if the click is not on the carousel
+                  if ((e.target as Element).closest(".carousel-container")) {
+                    e.preventDefault();
+                  }
+                }}
               >
                 <div className="aspect-w-16 aspect-h-9">
-                  <img
-                    src={car.images[0]?.url}
-                    alt={`${car.make} ${car.model}`}
-                    className="object-cover w-full h-48"
+                  <CarImageCarousel
+                    images={car.images}
+                    altText={`${car.make} ${car.model}`}
+                    className="h-48"
                   />
                 </div>
                 <div className="p-4">

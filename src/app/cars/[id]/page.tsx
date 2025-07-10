@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { getCarById, Car } from '@/services/api/carService';
 import { submitEnquiry } from '@/services/api/enquiryService';
+import CarImageCarousel from '@/components/CarImageCarousel';
 
 interface EnquiryForm {
   name: string;
@@ -85,10 +86,11 @@ export default function CarDetailsPage() {
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           {/* Image Gallery */}
           <div className="aspect-w-16 aspect-h-9">
-            <img
-              src={car.images[0]?.url}
-              alt={`${car.make} ${car.model}`}
-              className="object-cover w-full h-96"
+            <CarImageCarousel 
+              images={car.images} 
+              altText={`${car.make} ${car.model}`}
+              className="h-96"
+              showThumbnails={true}
             />
           </div>
 
