@@ -110,7 +110,7 @@ export default function Home() {
                     </div>
                     <div className="mt-4">
                       <span className="text-2xl font-bold text-gray-900">
-                        ${car.price.toLocaleString()}
+                        £{car.price.toLocaleString()}
                       </span>
                     </div>
                   </div>
