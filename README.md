@@ -84,6 +84,56 @@ npm start
 
 To access the admin dashboard, navigate to `/admin` and log in with the credentials specified in your `.env` file.
 
+## Deployment
+
+### Azure Deployment Pipeline
+
+This project is configured with a GitHub Actions workflow to automatically deploy to Azure App Service and use Azure Storage for image storage.
+
+#### Prerequisites for Deployment
+
+1. **Azure Resources**:
+   - Azure App Service plan and App Service
+   - Azure Storage account with a blob container
+
+2. **GitHub Secrets**:
+   - `AZURE_WEBAPP_PUBLISH_PROFILE`: The publish profile from your Azure App Service
+   - `MONGODB_URI`: Your production MongoDB connection string
+   - `AZURE_STORAGE_CONNECTION_STRING`: Your Azure Storage connection string
+   - `AZURE_STORAGE_CONTAINER_NAME`: Your Azure Storage container name
+   - `ADMIN_EMAIL`: Admin email for the production environment
+   - `ADMIN_PASSWORD`: Admin password for the production environment
+   - `JWT_SECRET`: JWT secret for authentication
+   - `NEXT_PUBLIC_API_URL`: The URL of your deployed application
+
+#### Deployment Process
+
+The deployment process is automated through GitHub Actions:
+
+1. Push changes to the `main` branch
+2. GitHub Actions workflow builds the application
+3. The built application is deployed to Azure App Service
+4. Images are stored in Azure Blob Storage
+
+#### Configuring Existing Azure Resources
+
+If you already have Azure resources created, you can use the provided script to configure them for deployment:
+
+1. Edit the configuration script with your resource names:
+   ```bash
+   # Open and edit the script with your resource names
+   nano scripts/configure-existing-azure.sh
+   ```
+
+2. Run the configuration script:
+   ```bash
+   ./scripts/configure-existing-azure.sh
+   ```
+
+3. Follow the instructions to set up GitHub secrets
+
+For detailed instructions, see the [Azure Deployment Guide](docs/azure-deployment-guide.md).
+
 ## License
 
 [MIT](LICENSE)

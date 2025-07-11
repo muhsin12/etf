@@ -42,3 +42,7 @@ next-env.d.ts
 
 # local uploads
 /public/uploads
+
+# Azure deployment
+publish_profile.xml
+.azure/
