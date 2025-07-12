@@ -23,7 +23,7 @@ export default function RootLayout({
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
               <Link href="/" className="text-2xl font-bold text-blue-600">
-                ETF Garage {process.env.MONGODB_URI}
+                ETF Garage{" "}
               </Link>
 
               <div className="hidden md:flex space-x-8">
