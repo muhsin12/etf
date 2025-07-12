@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Link from 'next/link';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Link from "next/link";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ETF Garage - Quality Pre-owned Vehicles',
-  description: 'Find your perfect pre-owned vehicle at ETF Garage. We offer a wide selection of quality used cars at competitive prices.',
+  title: "ETF Garage - Quality Pre-owned Vehicles",
+  description:
+    "Find your perfect pre-owned vehicle at ETF Garage. We offer a wide selection of quality used cars at competitive prices.",
 };
 
 export default function RootLayout({
@@ -21,23 +22,25 @@ export default function RootLayout({
         <header className="bg-white shadow-md">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
-              <Link href="/" className="text-2xl font-bold text-blue-600">ETF Garage</Link>
-              
+              <Link href="/" className="text-2xl font-bold text-blue-600">
+                ETF Garage {process.env.MONGODB_URI}
+              </Link>
+
               <div className="hidden md:flex space-x-8">
-                <Link 
-                  href="/" 
+                <Link
+                  href="/"
                   className="text-gray-700 hover:text-blue-600 transition duration-300"
                 >
                   Home
                 </Link>
-                <Link 
-                  href="/about" 
+                <Link
+                  href="/about"
                   className="text-gray-700 hover:text-blue-600 transition duration-300"
                 >
                   About
                 </Link>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="text-gray-700 hover:text-blue-600 transition duration-300"
                 >
                   Contact
@@ -47,8 +50,18 @@ export default function RootLayout({
               {/* Mobile menu button */}
               <div className="md:hidden">
                 <button className="text-gray-700 hover:text-blue-600 focus:outline-none">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
                   </svg>
                 </button>
               </div>
@@ -63,14 +76,34 @@ export default function RootLayout({
             <div className="grid md:grid-cols-3 gap-8">
               <div>
                 <h3 className="text-xl font-semibold mb-4">ETF Garage</h3>
-                <p className="text-gray-300">Your trusted partner in finding quality pre-owned vehicles.</p>
+                <p className="text-gray-300">
+                  Your trusted partner in finding quality pre-owned vehicles.
+                </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
                 <ul className="space-y-2">
-                  <li><Link href="/" className="text-gray-300 hover:text-white">Home</Link></li>
-                  <li><Link href="/about" className="text-gray-300 hover:text-white">About</Link></li>
-                  <li><Link href="/contact" className="text-gray-300 hover:text-white">Contact</Link></li>
+                  <li>
+                    <Link href="/" className="text-gray-300 hover:text-white">
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/about"
+                      className="text-gray-300 hover:text-white"
+                    >
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/contact"
+                      className="text-gray-300 hover:text-white"
+                    >
+                      Contact
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
@@ -84,7 +117,10 @@ export default function RootLayout({
               </div>
             </div>
             <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
-              <p>&copy; {new Date().getFullYear()} ETF Garage. All rights reserved.</p>
+              <p>
+                &copy; {new Date().getFullYear()} ETF Garage. All rights
+                reserved.
+              </p>
             </div>
           </div>
         </footer>
