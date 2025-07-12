@@ -2,10 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Car from '@/models/Car';
 
+interface MongoNumberQuery {
+  $gte?: number;
+  $lte?: number;
+}
+
+interface CarFilters {
+  make?: RegExp;
+  model?: RegExp;
+  price?: MongoNumberQuery;
+  year?: MongoNumberQuery;
+  mileage?: MongoNumberQuery;
+  fuelType?: string;
+  transmission?: string;
+  bodyType?: string;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const filters: any = {};
+    const filters: CarFilters = {};
 
     // Extract filter parameters
     const make = searchParams.get('make');
@@ -46,6 +62,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(cars);
   } catch (error) {
+    console.error('Failed to fetch cars:', error);
     return NextResponse.json(
       { error: 'Failed to fetch cars' },
       { status: 500 }
@@ -53,9 +70,28 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface CarRequestBody {
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  engineSize: string;
+  fuelType: 'Petrol' | 'Diesel' | 'Electric' | 'Hybrid';
+  transmission: 'Manual' | 'Automatic';
+  color: string;
+  description: string;
+  features: string[];
+  images: { url: string; key: string; }[];
+  condition: 'New' | 'Like New' | 'Excellent' | 'Good' | 'Fair';
+  bodyType: 'Sedan' | 'SUV' | 'Hatchback' | 'Coupe' | 'Wagon' | 'Van' | 'Truck';
+  registrationYear: number;
+  vin: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const data: CarRequestBody = await req.json();
     await connectDB();
 
     const car = new Car(data);
@@ -63,6 +99,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(car, { status: 201 });
   } catch (error) {
+    console.error('Failed to create car listing:', error);
     return NextResponse.json(
       { error: 'Failed to create car listing' },
       { status: 500 }

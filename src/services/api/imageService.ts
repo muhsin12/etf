@@ -10,7 +10,7 @@ export const uploadImages = async (files: File[]): Promise<{ url: string; key: s
     const formData = new FormData();
     
     // Append all files to the form data
-    files.forEach((file, index) => {
+    files.forEach((file) => {
       formData.append('files', file);
     });
     

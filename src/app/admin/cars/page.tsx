@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { getAllCars, deleteCar, getCarById, Car } from '@/services/api/carService';
 import CarFormModal from '../components/CarFormModal';
 
@@ -9,7 +10,6 @@ export default function AdminCars() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchCars();
@@ -42,7 +42,6 @@ export default function AdminCars() {
 
   const handleAddCar = () => {
     setSelectedCar(null);
-    setIsEditing(false);
     setIsModalOpen(true);
   };
 
@@ -50,7 +49,6 @@ export default function AdminCars() {
     try {
       const carData = await getCarById(carId);
       setSelectedCar(carData);
-      setIsEditing(true);
       setIsModalOpen(true);
     } catch (error) {
       console.error('Error fetching car data:', error);
@@ -103,10 +101,12 @@ export default function AdminCars() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
-                          <img
+                          <Image
                             className="h-10 w-10 rounded-full object-cover"
                             src={car.images[0]?.url || '/placeholder-car.jpg'}
                             alt={`${car.make} ${car.model}`}
+                            width={40}
+                            height={40}
                           />
                         </div>
                         <div className="ml-4">

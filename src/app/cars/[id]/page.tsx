@@ -56,6 +56,7 @@ export default function CarDetailsPage() {
       setShowEnquiryForm(false);
       setEnquiryForm({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
+      console.error('Failed to submit enquiry:', error);
       setSubmitStatus({
         loading: false,
         error: 'Failed to submit enquiry. Please try again.',

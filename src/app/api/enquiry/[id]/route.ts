@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import connectDB from '@/lib/mongodb';
 import mongoose from 'mongoose';
 
 // Define the Enquiry schema if not already defined in a separate model file
@@ -19,11 +19,11 @@ const EnquirySchema = new mongoose.Schema({
 // Get the Enquiry model (create if it doesn't exist)
 const Enquiry = mongoose.models.Enquiry || mongoose.model('Enquiry', EnquirySchema);
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectToDatabase();
+    await connectDB();
 
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { status } = body;
 
@@ -59,11 +59,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connectToDatabase();
+    await connectDB();
 
-    const { id } = params;
+    const { id } = await params;
 
     const enquiry = await Enquiry.findById(id).populate('carId');
 

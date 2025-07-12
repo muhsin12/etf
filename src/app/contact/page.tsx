@@ -29,7 +29,7 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900">Contact ETF Garage</h1>
-          <p className="mt-4 text-lg text-gray-600">We're here to help with all your automotive needs</p>
+          <p className="mt-4 text-lg text-gray-600">We&apos;re here to help with all your automotive needs</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">

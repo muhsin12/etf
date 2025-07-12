@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { getCarById, updateCar, Car } from "@/services/api/carService";
 
-export default function EditCar({ params }: { params: { id: string } }) {
+export default function EditCar({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState<FileList | null>(null);
+  const [carId, setCarId] = useState<string>("");
   const [carData, setCarData] = useState<Car>({
     _id: "",
     make: "",
@@ -29,21 +31,27 @@ export default function EditCar({ params }: { params: { id: string } }) {
     images: [],
   });
 
-  useEffect(() => {
-    fetchCarData();
-  }, []);
-
-  const fetchCarData = async () => {
+  const fetchCarData = useCallback(async (id: string) => {
+    setLoading(true);
     try {
-      const data = await getCarById(params.id);
+      const data = await getCarById(id);
       setCarData(data);
-    } catch (error) {
+    } catch (error) { 
       console.error("Error fetching car data:", error);
       alert("Failed to load car data");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const initializeComponent = async () => {
+      const resolvedParams = await params;
+      setCarId(resolvedParams.id);
+      fetchCarData(resolvedParams.id);
+    };
+    initializeComponent();
+  }, [params, fetchCarData]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -105,7 +113,7 @@ export default function EditCar({ params }: { params: { id: string } }) {
         });
       }
 
-      const data = await updateCar(params.id, formData);
+      await updateCar(carId, formData);
 
       router.push("/admin/cars");
     } catch (error) {
@@ -383,10 +391,12 @@ export default function EditCar({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-5 gap-4 mt-2">
               {carData.images.map((image, index) => (
                 <div key={index} className="relative">
-                  <img
+                  <Image
                     src={image.url}
                     alt={`Car image ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md"
+                    width={96}
+                    height={96}
+                    className="object-cover rounded-md"
                   />
                 </div>
               ))}

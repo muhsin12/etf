@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
     try {
       data.carId = new mongoose.Types.ObjectId(data.carId);
     } catch (error) {
+      console.error('Invalid car ID format:', error);
       return NextResponse.json(
         { error: 'Invalid car ID format. The ID must be a valid MongoDB ObjectId.' },
         { status: 400 }

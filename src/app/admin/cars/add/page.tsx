@@ -52,7 +52,7 @@ export default function AddCar() {
 
     try {
       // Upload images first if there are any
-      let uploadedImages = [];
+      let uploadedImages: { url: string; key: string }[] = [];
       if (images.length > 0) {
         try {
           uploadedImages = await uploadImages(images);
@@ -65,7 +65,7 @@ export default function AddCar() {
       }
 
       // Create the car entry with uploaded images
-      const car = await createCar({
+      await createCar({
         ...formData,
         year: parseInt(formData.year),
         price: parseFloat(formData.price),

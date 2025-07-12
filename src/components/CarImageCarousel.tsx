@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -29,11 +30,12 @@ const CarImageCarousel: React.FC<CarImageCarouselProps> = ({
   // If no images, return default image
   if (!images || images.length === 0) {
     return (
-      <div className={`overflow-hidden ${className}`}>
-        <img 
+      <div className={`relative overflow-hidden ${className}`}>
+        <Image 
           src={defaultImage} 
           alt={altText} 
-          className="object-cover w-full h-full"
+          fill
+          style={{ objectFit: 'cover' }}
         />
       </div>
     );
@@ -42,11 +44,12 @@ const CarImageCarousel: React.FC<CarImageCarouselProps> = ({
   // If only one image, return it without carousel
   if (images.length === 1) {
     return (
-      <div className={`overflow-hidden ${className}`}>
-        <img 
+      <div className={`relative overflow-hidden ${className}`}>
+        <Image 
           src={images[0].url} 
           alt={altText} 
-          className="object-cover w-full h-full"
+          fill
+          style={{ objectFit: 'cover' }}
         />
       </div>
     );
@@ -94,11 +97,12 @@ const CarImageCarousel: React.FC<CarImageCarouselProps> = ({
         {...mainSettings}
       >
         {images.map((image, index) => (
-          <div key={index} className={`overflow-hidden ${className}`}>
-            <img 
+          <div key={index} className={`relative overflow-hidden ${className}`}>
+            <Image 
               src={image.url} 
               alt={`${altText} - Image ${index + 1}`} 
-              className="object-cover w-full h-full"
+              fill
+              style={{ objectFit: 'cover' }}
               onClick={(e) => e.stopPropagation()}
             />
           </div>
@@ -119,11 +123,13 @@ const CarImageCarousel: React.FC<CarImageCarouselProps> = ({
           >
             {images.map((image, index) => (
               <div key={index} className="px-1">
-                <div className={`overflow-hidden h-16 ${currentSlide === index ? 'ring-2 ring-blue-500' : ''}`}>
-                  <img
+                <div className={`relative overflow-hidden h-16 ${currentSlide === index ? 'ring-2 ring-blue-500' : ''}`}>
+                  <Image
                     src={image.url}
                     alt={`${altText} - Thumbnail ${index + 1}`}
-                    className="object-cover w-full h-full cursor-pointer"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    className="cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       if (sliderRef.current) {

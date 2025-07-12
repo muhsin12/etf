@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { createCar, updateCar, Car } from "@/services/api/carService";
 import { uploadImages } from "@/services/api/imageService";
 
@@ -38,18 +39,14 @@ export default function CarFormModal({
 }: CarFormModalProps) {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<File[]>([]);
-  const [formData, setFormData] = useState<Omit<Car, "_id"> | any>(
-    defaultCarData
-  );
+  const [formData, setFormData] = useState<Omit<Car, "_id">>(defaultCarData);
 
   // Populate form when editing a car
   useEffect(() => {
     if (carToEdit) {
       setFormData({
         ...carToEdit,
-        features: Array.isArray(carToEdit.features)
-          ? carToEdit.features.join(", ")
-          : "",
+        features: Array.isArray(carToEdit.features) ? carToEdit.features : [],
       });
     } else {
       setFormData(defaultCarData);
@@ -85,7 +82,7 @@ export default function CarFormModal({
 
     try {
       // Upload images first if there are any
-      let uploadedImages: any[] = [];
+      let uploadedImages: { url: string; key: string }[] = [];
       if (images.length > 0) {
         try {
           uploadedImages = await uploadImages(images);
@@ -135,9 +132,11 @@ export default function CarFormModal({
           registrationYear: parseInt(String(formData.registrationYear)),
           features:
             typeof formData.features === "string"
-              ? formData.features.split(",").map((f: string) => f.trim())
+              ? (formData.features as string)
+                  .split(",")
+                  .map((f: string) => f.trim())
               : formData.features,
-          images: uploadedImages as string[], // Use uploaded images
+          images: uploadedImages, // Use uploaded images with correct type
         });
       }
 
@@ -472,10 +471,12 @@ export default function CarFormModal({
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {carToEdit.images.map((image, index) => (
                   <div key={index} className="relative">
-                    <img
+                    <Image
                       src={image.url}
                       alt={`Car image ${index + 1}`}
-                      className="h-24 w-24 object-cover rounded-md"
+                      width={96}
+                      height={96}
+                      className="object-cover rounded-md"
                     />
                   </div>
                 ))}

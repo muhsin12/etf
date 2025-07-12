@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/etf_garage";
@@ -9,13 +9,18 @@ if (!MONGODB_URI) {
   );
 }
 
-let cached: {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-} = (global as any).mongoose;
+
+declare global {
+  var mongoose: {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
+  };
+}
+
+let cached = global.mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
 async function connectDB() {
