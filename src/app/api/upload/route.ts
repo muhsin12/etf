@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import path from "path";
 import crypto from "crypto";
 import { BlobServiceClient } from "@azure/storage-blob";
-
-// These local storage configurations are no longer used for file uploads, as all uploads now go directly to Azure.
-// They are kept here in case they are referenced by other parts of the application for local file paths or URLs.
-const LOCAL_UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const LOCAL_UPLOAD_URL_PREFIX = "/uploads";
 
 // Azure configuration (for production)
 const AZURE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -57,7 +51,7 @@ async function uploadToAzure(files: File[]) {
 
   // Create container if it doesn't exist
   await containerClient.createIfNotExists({
-    access: 'blob' // Public read access for blobs only
+    access: "blob", // Public read access for blobs only
   });
 
   const uploadPromises = files.map(async (file) => {
@@ -77,7 +71,7 @@ async function uploadToAzure(files: File[]) {
 
     // Return the URL of the uploaded file
     return {
-      url: blockBlobClient.url.replace(/`/g, ''),
+      url: blockBlobClient.url.replace(/`/g, ""),
       key: fileName,
     };
   });
