@@ -1,4 +1,5 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose, { Mongoose } from 'mongoose';
+import '@/models/Car';
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/etf_garage";

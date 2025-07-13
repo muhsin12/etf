@@ -1,34 +1,49 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import mongoose from 'mongoose';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import mongoose from "mongoose";
 
 // Create Enquiry Schema
 const EnquirySchema = new mongoose.Schema({
   carId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Car'
+    ref: "Car",
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   phone: String,
   message: {
     type: String,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-const Enquiry = mongoose.models.Enquiry || mongoose.model('Enquiry', EnquirySchema);
+const Enquiry =
+  mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema);
+
+export async function GET() {
+  try {
+    await connectDB();
+    const enquiries = await Enquiry.find({}).populate("carId");
+    return NextResponse.json(enquiries, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching enquiries:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch enquiries" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,15 +53,22 @@ export async function POST(req: NextRequest) {
     // Validate required fields and convert carId to ObjectId
     if (!data.carId || !data.name || !data.email || !data.message) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
     // Validate carId format
-    if (!data.carId || typeof data.carId !== 'string' || data.carId.length !== 24) {
+    if (
+      !data.carId ||
+      typeof data.carId !== "string" ||
+      data.carId.length !== 24
+    ) {
       return NextResponse.json(
-        { error: 'Invalid car ID format. Expected a 24-character hexadecimal string.' },
+        {
+          error:
+            "Invalid car ID format. Expected a 24-character hexadecimal string.",
+        },
         { status: 400 }
       );
     }
@@ -55,9 +77,12 @@ export async function POST(req: NextRequest) {
     try {
       data.carId = new mongoose.Types.ObjectId(data.carId);
     } catch (error) {
-      console.error('Invalid car ID format:', error);
+      console.error("Invalid car ID format:", error);
       return NextResponse.json(
-        { error: 'Invalid car ID format. The ID must be a valid MongoDB ObjectId.' },
+        {
+          error:
+            "Invalid car ID format. The ID must be a valid MongoDB ObjectId.",
+        },
         { status: 400 }
       );
     }
@@ -71,13 +96,13 @@ export async function POST(req: NextRequest) {
     // like SendGrid, AWS SES, or similar
 
     return NextResponse.json(
-      { message: 'Enquiry submitted successfully' },
+      { message: "Enquiry submitted successfully" },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error submitting enquiry:', error);
+    console.error("Error submitting enquiry:", error);
     return NextResponse.json(
-      { error: 'Failed to submit enquiry' },
+      { error: "Failed to submit enquiry" },
       { status: 500 }
     );
   }
