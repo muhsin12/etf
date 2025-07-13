@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
+    console.log("admin emaiil and passowrd");
+    console.log("****************************************");
+    console.log("EAMIL----", ADMIN_EMAIL);
+    console.log("PASSWORD----", ADMIN_PASSWORD);
     // Validate credentials
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
