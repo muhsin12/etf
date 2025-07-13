@@ -92,13 +92,11 @@ export default function Home() {
                   href={`/cars/${car._id}`}
                   className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 flex flex-col"
                 >
-                  <div className="relative w-full h-48">
-                    <CarImageCarousel
-                      images={car.images}
-                      altText={`${car.make} ${car.model}`}
-                      className="rounded-t-xl"
-                    />
-                  </div>
+                  <CarImageCarousel
+                    images={car.images}
+                    altText={`${car.make} ${car.model}`}
+                    className="w-full h-48 rounded-t-xl"
+                  />
                   <div className="p-5 flex-grow flex flex-col justify-between">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-1">

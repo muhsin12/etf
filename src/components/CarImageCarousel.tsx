@@ -14,8 +14,8 @@ interface CarImageCarouselProps {
   showThumbnails?: boolean;
 }
 
-const CarImageCarousel: React.FC<CarImageCarouselProps> = ({ 
-  images, 
+const CarImageCarousel: React.FC<CarImageCarouselProps> = ({
+  images,
   altText,
   className = 'w-full h-48',
   showThumbnails = false
