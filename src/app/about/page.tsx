@@ -5,7 +5,7 @@ export default function About() {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">About ETF Garage</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">About MMP Garage</h1>
         </div>
         
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -13,7 +13,7 @@ export default function About() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Trusted Partner in Pre-owned Vehicles</h2>
             
             <p className="text-gray-600 mb-6">
-              ETF Garage is your premier destination for quality pre-owned vehicles. With years of experience in the automotive industry, 
+              MMP Garage is your premier destination for quality pre-owned vehicles. With years of experience in the automotive industry, 
               we pride ourselves on offering a carefully curated selection of second-hand cars that meet our rigorous standards for quality and reliability.
             </p>
 
@@ -38,7 +38,7 @@ export default function About() {
             </div>
 
             <div className="mt-12">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4">Why Choose ETF Garage?</h3>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">Why Choose MMP Garage?</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">Expert Inspection</h4>

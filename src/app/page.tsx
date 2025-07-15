@@ -56,7 +56,7 @@ export default function Home() {
             Your Journey Starts Here
           </h1>
           <p className="text-2xl mb-10 animate-fade-in-up animation-delay-200">
-            Discover premium vehicles and exceptional service at ETF Garage.
+            Discover premium vehicles and exceptional service at MMP Garage.
           </p>
           <Link
             href="/cars"
@@ -147,7 +147,7 @@ export default function Home() {
       <div className="bg-gray-50 py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-extrabold text-gray-900 mb-12 text-center">
-            Why Choose <span className="text-red-600">ETF Garage</span>?
+            Why Choose <span className="text-red-600">MMP Garage</span>?
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">

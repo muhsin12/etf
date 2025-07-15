@@ -6,9 +6,9 @@ import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ETF Garage - Quality Pre-owned Vehicles",
+  title: "MMP Garage - Quality Pre-owned Vehicles",
   description:
-    "Find your perfect pre-owned vehicle at ETF Garage. We offer a wide selection of quality used cars at competitive prices.",
+    "Find your perfect pre-owned vehicle at MMP Garage. We offer a wide selection of quality used cars at competitive prices.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
               <Link href="/" className="text-2xl font-bold text-blue-600">
-                ETF Garage{" "}
+                MMP Garage{" "}
               </Link>
 
               <div className="hidden md:flex space-x-8">
@@ -75,7 +75,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4">ETF Garage</h3>
+                <h3 className="text-xl font-semibold mb-4">MMP Garage</h3>
                 <p className="text-gray-300">
                   Your trusted partner in finding quality pre-owned vehicles.
                 </p>
@@ -118,7 +118,7 @@ export default function RootLayout({
             </div>
             <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
               <p>
-                &copy; {new Date().getFullYear()} ETF Garage. All rights
+                &copy; {new Date().getFullYear()} MMP Garage. All rights
                 reserved.
               </p>
             </div>

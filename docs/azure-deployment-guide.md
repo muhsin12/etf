@@ -1,6 +1,6 @@
-# Azure Deployment Guide for ETF Garage
+# Azure Deployment Guide for MMP Garage
 
-This guide explains how to configure existing Azure resources and set up GitHub Actions for deploying the ETF Garage application.
+This guide explains how to configure existing Azure resources and set up GitHub Actions for deploying the MMP Garage application.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
-# ETF Garage - Second-Hand Car Sales Website
+# MMP Garage - Second-Hand Car Sales Website
 
-A modern web application for ETF Garage's second-hand car sales business, built with Next.js, TypeScript, Tailwind CSS, and MongoDB.
+A modern web application for MMP Garage's second-hand car sales business, built with Next.js, TypeScript, Tailwind CSS, and MongoDB.
 
 ## Features
 
