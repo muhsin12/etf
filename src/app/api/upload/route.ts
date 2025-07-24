@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import crypto from "crypto";
 import { BlobServiceClient } from "@azure/storage-blob";
+import fs from "fs/promises";
+import path from "path";
 
 // Azure configuration (for production)
 const AZURE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const AZURE_CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER_NAME || "cars";
 
 export async function POST(request: NextRequest) {
-  console.log("*******************************************************");
-  console.log("connection string azure storage--", AZURE_CONNECTION_STRING);
   try {
     const formData = await request.formData();
     const files = formData.getAll("files") as File[];
@@ -25,8 +24,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Choose upload method based on environment
-    const uploadedFiles = await uploadToAzure(files);
+    let uploadedFiles: { url: string; key: string }[];
+
+    if (process.env.NODE_ENV === "development") {
+      uploadedFiles = await uploadToLocal(files);
+    } else {
+      uploadedFiles = await uploadToAzure(files);
+    }
 
     return NextResponse.json(uploadedFiles);
   } catch (error) {
@@ -72,6 +76,29 @@ async function uploadToAzure(files: File[]) {
     // Return the URL of the uploaded file
     return {
       url: blockBlobClient.url.replace(/`/g, ""),
+      key: fileName,
+    };
+  });
+
+  return Promise.all(uploadPromises);
+}
+
+
+async function uploadToLocal(files: File[]) {
+  const uploadDir = path.join(process.cwd(), "public", "uploads");
+  await fs.mkdir(uploadDir, { recursive: true });
+
+  const uploadPromises = files.map(async (file) => {
+    const fileExtension = file.name.split(".").pop();
+    const randomName = crypto.randomBytes(16).toString("hex");
+    const fileName = `${randomName}.${fileExtension}`;
+    const filePath = path.join(uploadDir, fileName);
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await fs.writeFile(filePath, buffer);
+
+    return {
+      url: `/uploads/${fileName}`,
       key: fileName,
     };
   });

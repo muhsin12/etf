@@ -1,8 +1,9 @@
 name: Deploy to Azure
 
 on:
-  push:
-    branches: [ main ]
+  # Disabling push trigger as requested by user
+  # push:
+  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
