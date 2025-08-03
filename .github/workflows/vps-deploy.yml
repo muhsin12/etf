@@ -48,39 +48,42 @@ jobs:
           # Navigate to application directory
           cd /home/gulf-restaurant/htdocs/www.gulf-restaurant.com
           
-          # Check if this is initial setup (no git repository)
-          if [ ! -d ".git" ]; then
-            echo "🔧 Initial setup: Setting up repository..."
-            
-            # Initialize git repository
-            git init
-            git remote add origin https://github.com/${{ github.repository }}
-            
-            # Set up Node.js version (ensure Node 22 LTS is available)
-            if command -v nvm &> /dev/null; then
-              nvm use 22 || nvm install 22
-            fi
-            
-            # Install PM2 if not already installed
-            if ! command -v pm2 &> /dev/null; then
-              npm install -g pm2
-            fi
-            
-            # Pull the code
-            git fetch origin
-            git checkout -b main origin/main
-          else
-            echo "📦 Updating existing deployment..."
-            # Stop the application
-            pm2 stop mmp-garage || true
-            
-            # Create backup
+          # Stop the application first
+          pm2 stop mmp-garage || true
+          
+          # Create backup if directory exists and has content
+          if [ -d ".git" ] && [ "$(ls -A .)" ]; then
+            echo "📦 Creating backup..."
             cp -r /home/gulf-restaurant/htdocs/www.gulf-restaurant.com /home/gulf-restaurant/backups/backup-$(date +%Y%m%d-%H%M%S) || true
-            
-            # Pull latest changes
-            git fetch origin
-            git reset --hard origin/main
           fi
+          
+          # Clean up existing directory for fresh deployment
+          echo "🧹 Cleaning deployment directory..."
+          rm -rf /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/*
+          rm -rf /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/.[!.]*
+          
+          # Clone the repository fresh each time
+          echo "📥 Cloning repository..."
+          git clone https://github.com/muhsin12/etf.git /tmp/etf-deploy
+          
+          # Copy files to deployment directory
+          echo "📋 Copying files to deployment directory..."
+          cp -r /tmp/etf-deploy/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
+          cp -r /tmp/etf-deploy/.[!.]* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/ 2>/dev/null || true
+          
+          # Clean up temporary directory
+          rm -rf /tmp/etf-deploy
+          
+          # Navigate back to application directory
+          cd /home/gulf-restaurant/htdocs/www.gulf-restaurant.com
+          
+          # Verify files were copied correctly
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found after cloning! Deployment failed."
+            exit 1
+          fi
+          
+          echo "✅ Repository cloned successfully"
           
           # Install dependencies
           echo "📦 Installing dependencies..."
@@ -90,6 +93,18 @@ jobs:
           else
             echo "Using npm install..."
             npm install
+          fi
+          
+          # Set up Node.js version (ensure Node 18 LTS is available)
+          if command -v nvm &> /dev/null; then
+            echo "🔧 Setting up Node.js version..."
+            nvm use 18 || nvm install 18
+          fi
+          
+          # Install PM2 if not already installed
+          if ! command -v pm2 &> /dev/null; then
+            echo "🔧 Installing PM2..."
+            npm install -g pm2
           fi
           
           # Create .env file if it doesn't exist
