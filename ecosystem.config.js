@@ -3,22 +3,22 @@ module.exports = {
     name: 'mmp-garage',
     script: 'npm',
     args: 'start',
-    cwd: '/var/www/mmp-garage',
-    instances: 'max', // Use all available CPU cores
-    exec_mode: 'cluster',
+    cwd: '/home/gulf-restaurant/htdocs/www.gulf-restaurant.com',
+    instances: 1, // Start with single instance for VPS
+    exec_mode: 'fork', // Use fork mode for better compatibility
     env: {
       NODE_ENV: 'production',
-      PORT: 3000
+      PORT: 3001 // Match your VPS Node.js settings
     },
     env_production: {
       NODE_ENV: 'production',
-      PORT: 3000,
+      PORT: 3001,
       NEXT_PUBLIC_API_URL: 'https://www.gulf-restaurant.com'
     },
-    // Logging
-    log_file: '/var/log/pm2/mmp-garage.log',
-    out_file: '/var/log/pm2/mmp-garage-out.log',
-    error_file: '/var/log/pm2/mmp-garage-error.log',
+    // Logging - use home directory for logs
+    log_file: '/home/gulf-restaurant/logs/mmp-garage.log',
+    out_file: '/home/gulf-restaurant/logs/mmp-garage-out.log',
+    error_file: '/home/gulf-restaurant/logs/mmp-garage-error.log',
     log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
     
     // Auto-restart configuration

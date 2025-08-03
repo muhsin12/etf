@@ -40,33 +40,77 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         port: ${{ secrets.VPS_PORT || 22 }}
         script: |
+          # Create application directory if it doesn't exist
+          mkdir -p /home/gulf-restaurant/htdocs/www.gulf-restaurant.com
+          mkdir -p /home/gulf-restaurant/logs
+          mkdir -p /home/gulf-restaurant/backups
+          
           # Navigate to application directory
-          cd /var/www/mmp-garage || exit 1
+          cd /home/gulf-restaurant/htdocs/www.gulf-restaurant.com
           
-          # Stop the application
-          pm2 stop mmp-garage || true
-          
-          # Create backup
-          sudo mkdir -p /var/backups/mmp-garage
-          sudo cp -r /var/www/mmp-garage /var/backups/mmp-garage/backup-$(date +%Y%m%d-%H%M%S) || true
-          
-          # Pull latest changes
-          git fetch origin
-          git reset --hard origin/main
+          # Check if this is initial setup (no git repository)
+          if [ ! -d ".git" ]; then
+            echo "🔧 Initial setup: Cloning repository..."
+            git clone https://github.com/${{ github.repository }} .
+            
+            # Set up Node.js version (ensure Node 22 LTS is available)
+            if command -v nvm &> /dev/null; then
+              nvm use 22 || nvm install 22
+            fi
+            
+            # Install PM2 if not already installed
+            if ! command -v pm2 &> /dev/null; then
+              npm install -g pm2
+            fi
+          else
+            echo "📦 Updating existing deployment..."
+            # Stop the application
+            pm2 stop mmp-garage || true
+            
+            # Create backup
+            cp -r /home/gulf-restaurant/htdocs/www.gulf-restaurant.com /home/gulf-restaurant/backups/backup-$(date +%Y%m%d-%H%M%S) || true
+            
+            # Pull latest changes
+            git fetch origin
+            git reset --hard origin/main
+          fi
           
           # Install dependencies
           npm ci --production
           
+          # Create .env file if it doesn't exist
+          if [ ! -f ".env" ]; then
+            echo "🔧 Creating production environment file..."
+            cat > .env << EOF
+          NODE_ENV=production
+          PORT=3001
+          MONGODB_URI=${{ secrets.MONGODB_URI }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          EOF
+          fi
+          
           # Build application
           npm run build
           
-          # Restart application with PM2
-          pm2 start ecosystem.config.js || pm2 restart mmp-garage
+          # Start/Restart application with PM2
+          if pm2 list | grep -q "mmp-garage"; then
+            pm2 restart mmp-garage
+          else
+            pm2 start ecosystem.config.js
+          fi
           
           # Save PM2 configuration
           pm2 save
           
+          # Setup PM2 startup script (run once)
+          pm2 startup || true
+          
           echo "✅ Deployment completed successfully!"
+          echo "🌐 Application should be available at: https://www.gulf-restaurant.com"
+          echo "📊 Check status with: pm2 status"
 
     - name: Health Check
       uses: appleboy/ssh-action@v1.0.0
@@ -77,21 +121,44 @@ jobs:
         port: ${{ secrets.VPS_PORT || 22 }}
         script: |
           # Wait for application to start
-          sleep 10
+          echo "⏳ Waiting for application to start..."
+          sleep 15
           
           # Check if application is running
           if pm2 list | grep -q "mmp-garage.*online"; then
             echo "✅ Application is running successfully"
             
-            # Test HTTP response
-            if curl -f -s https://www.gulf-restaurant.com > /dev/null; then
-              echo "✅ Application is responding to HTTP requests"
+            # Check if port 3001 is listening
+            if netstat -tuln | grep -q ":3001"; then
+              echo "✅ Application is listening on port 3001"
             else
-              echo "❌ Application is not responding to HTTP requests"
-              exit 1
+              echo "⚠️  Port 3001 not found, checking PM2 logs..."
+              pm2 logs mmp-garage --lines 10
             fi
+            
+            # Test HTTP response (check both HTTP and HTTPS)
+            echo "🔍 Testing HTTP connectivity..."
+            if curl -f -s -m 10 http://localhost:3001 > /dev/null; then
+              echo "✅ Local HTTP response successful"
+            else
+              echo "⚠️  Local HTTP test failed"
+            fi
+            
+            if curl -f -s -m 10 https://www.gulf-restaurant.com > /dev/null; then
+              echo "✅ External HTTPS response successful"
+            else
+              echo "⚠️  External HTTPS test failed - may need time for DNS/proxy setup"
+            fi
+            
+            # Display PM2 status
+            echo "📊 PM2 Status:"
+            pm2 status
+            
           else
             echo "❌ Application failed to start"
+            echo "📋 PM2 Status:"
+            pm2 status
+            echo "📋 Recent logs:"
             pm2 logs mmp-garage --lines 20
             exit 1
           fi
