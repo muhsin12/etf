@@ -1,0 +1,97 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT || 22 }}
+        script: |
+          # Navigate to application directory
+          cd /var/www/mmp-garage || exit 1
+          
+          # Stop the application
+          pm2 stop mmp-garage || true
+          
+          # Create backup
+          sudo mkdir -p /var/backups/mmp-garage
+          sudo cp -r /var/www/mmp-garage /var/backups/mmp-garage/backup-$(date +%Y%m%d-%H%M%S) || true
+          
+          # Pull latest changes
+          git fetch origin
+          git reset --hard origin/main
+          
+          # Install dependencies
+          npm ci --production
+          
+          # Build application
+          npm run build
+          
+          # Restart application with PM2
+          pm2 start ecosystem.config.js || pm2 restart mmp-garage
+          
+          # Save PM2 configuration
+          pm2 save
+          
+          echo "✅ Deployment completed successfully!"
+
+    - name: Health Check
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT || 22 }}
+        script: |
+          # Wait for application to start
+          sleep 10
+          
+          # Check if application is running
+          if pm2 list | grep -q "mmp-garage.*online"; then
+            echo "✅ Application is running successfully"
+            
+            # Test HTTP response
+            if curl -f -s https://www.gulf-restaurant.com > /dev/null; then
+              echo "✅ Application is responding to HTTP requests"
+            else
+              echo "❌ Application is not responding to HTTP requests"
+              exit 1
+            fi
+          else
+            echo "❌ Application failed to start"
+            pm2 logs mmp-garage --lines 20
+            exit 1
+          fi

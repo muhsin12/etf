@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "node_modules/next/dist/bin/next start",
     "lint": "next lint",
-    "azure-deploy": "next build && next start"
+    "deploy:vps": "chmod +x scripts/deploy-vps.sh && ./scripts/deploy-vps.sh",
+    "clean": "rm -rf .next && rm -rf node_modules && npm install",
+    "prod:start": "NODE_ENV=production npm start"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.27.0",
