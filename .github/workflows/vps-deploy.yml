@@ -50,8 +50,11 @@ jobs:
           
           # Check if this is initial setup (no git repository)
           if [ ! -d ".git" ]; then
-            echo "🔧 Initial setup: Cloning repository..."
-            git clone https://github.com/${{ github.repository }} .
+            echo "🔧 Initial setup: Setting up repository..."
+            
+            # Initialize git repository
+            git init
+            git remote add origin https://github.com/${{ github.repository }}
             
             # Set up Node.js version (ensure Node 22 LTS is available)
             if command -v nvm &> /dev/null; then
@@ -62,6 +65,10 @@ jobs:
             if ! command -v pm2 &> /dev/null; then
               npm install -g pm2
             fi
+            
+            # Pull the code
+            git fetch origin
+            git checkout -b main origin/main
           else
             echo "📦 Updating existing deployment..."
             # Stop the application
@@ -76,7 +83,14 @@ jobs:
           fi
           
           # Install dependencies
-          npm ci --production
+          echo "📦 Installing dependencies..."
+          if [ -f "package-lock.json" ]; then
+            echo "Using npm ci..."
+            npm ci
+          else
+            echo "Using npm install..."
+            npm install
+          fi
           
           # Create .env file if it doesn't exist
           if [ ! -f ".env" ]; then
@@ -93,13 +107,27 @@ jobs:
           fi
           
           # Build application
-          npm run build
+          if [ -f "package.json" ]; then
+            npm run build
+          else
+            echo "❌ package.json not found! Repository may not have been pulled correctly."
+            exit 1
+          fi
           
           # Start/Restart application with PM2
-          if pm2 list | grep -q "mmp-garage"; then
-            pm2 restart mmp-garage
+          if [ -f "ecosystem.config.js" ]; then
+            if pm2 list | grep -q "mmp-garage"; then
+              pm2 restart mmp-garage
+            else
+              pm2 start ecosystem.config.js
+            fi
           else
-            pm2 start ecosystem.config.js
+            echo "❌ ecosystem.config.js not found! Using fallback PM2 configuration."
+            if pm2 list | grep -q "mmp-garage"; then
+              pm2 restart mmp-garage
+            else
+              pm2 start npm --name "mmp-garage" -- start
+            fi
           fi
           
           # Save PM2 configuration
