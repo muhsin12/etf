@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { BlobServiceClient } from "@azure/storage-blob";
 import fs from "fs/promises";
 import path from "path";
-
-// Azure configuration (for production)
-const AZURE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
-const AZURE_CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER_NAME || "cars";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,13 +19,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let uploadedFiles: { url: string; key: string }[];
-
-    if (process.env.NODE_ENV === "development") {
-      uploadedFiles = await uploadToLocal(files);
-    } else {
-      uploadedFiles = await uploadToAzure(files);
-    }
+    // Use local upload for both development and production
+    const uploadedFiles = await uploadToLocal(files);
 
     return NextResponse.json(uploadedFiles);
   } catch (error) {
@@ -42,54 +32,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function uploadToAzure(files: File[]) {
-  if (!AZURE_CONNECTION_STRING) {
-    throw new Error("Azure Storage connection string is not configured");
-  }
-
-  const blobServiceClient = BlobServiceClient.fromConnectionString(
-    AZURE_CONNECTION_STRING
-  );
-  const containerClient =
-    blobServiceClient.getContainerClient(AZURE_CONTAINER_NAME);
-
-  // Create container if it doesn't exist
-  await containerClient.createIfNotExists({
-    access: "blob", // Public read access for blobs only
-  });
-
-  const uploadPromises = files.map(async (file) => {
-    // Generate a unique filename
-    const fileExtension = file.name.split(".").pop();
-    const randomName = crypto.randomBytes(16).toString("hex");
-    const fileName = `${randomName}.${fileExtension}`;
-
-    // Get a block blob client
-    const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-
-    // Convert file to buffer and upload
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await blockBlobClient.upload(buffer, buffer.length, {
-      blobHTTPHeaders: { blobContentType: file.type },
-    });
-
-    // Return the URL of the uploaded file
-    return {
-      url: blockBlobClient.url.replace(/`/g, ""),
-      key: fileName,
-    };
-  });
-
-  return Promise.all(uploadPromises);
-}
-
-
 async function uploadToLocal(files: File[]) {
   const uploadDir = path.join(process.cwd(), "public", "uploads");
+  
+  // Ensure the uploads directory exists
   await fs.mkdir(uploadDir, { recursive: true });
 
   const uploadPromises = files.map(async (file) => {
-    const fileExtension = file.name.split(".").pop();
+    // Validate file type (images only)
+    if (!file.type.startsWith('image/')) {
+      throw new Error(`Invalid file type: ${file.type}. Only images are allowed.`);
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      throw new Error(`File too large: ${file.name}. Maximum size is 5MB.`);
+    }
+
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const randomName = crypto.randomBytes(16).toString("hex");
     const fileName = `${randomName}.${fileExtension}`;
     const filePath = path.join(uploadDir, fileName);

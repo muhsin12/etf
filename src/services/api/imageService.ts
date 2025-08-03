@@ -1,9 +1,8 @@
-// Image Service for handling image uploads to local storage (development) or Azure Blob Storage (production)
+// Image Service for handling image uploads to local storage
 
 /**
- * Upload multiple images to storage
- * In development: Saves to local filesystem
- * In production: Uploads to Azure Blob Storage
+ * Upload multiple images to local storage
+ * Saves images to public/uploads directory for both development and production
  */
 export const uploadImages = async (files: File[]): Promise<{ url: string; key: string }[]> => {
   try {
