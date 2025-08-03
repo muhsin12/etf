@@ -62,28 +62,35 @@ jobs:
           rm -rf /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/*
           rm -rf /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/.[!.]*
           
-          # Clone the repository fresh each time
-          echo "📥 Cloning repository..."
-          git clone https://github.com/muhsin12/etf.git /tmp/etf-deploy
+          # Download repository as ZIP (no authentication required)
+          echo "📥 Downloading repository..."
+          curl -L -o /tmp/etf-deploy.zip https://github.com/muhsin12/etf/archive/refs/heads/main.zip
           
-          # Copy files to deployment directory
+          # Extract the ZIP file
+          echo "📦 Extracting repository..."
+          cd /tmp
+          unzip -q etf-deploy.zip
+          
+          # Copy files to deployment directory (the extracted folder will be named etf-main)
           echo "📋 Copying files to deployment directory..."
-          cp -r /tmp/etf-deploy/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
-          cp -r /tmp/etf-deploy/.[!.]* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/ 2>/dev/null || true
+          cp -r /tmp/etf-main/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
+          cp -r /tmp/etf-main/.[!.]* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/ 2>/dev/null || true
           
-          # Clean up temporary directory
-          rm -rf /tmp/etf-deploy
+          # Clean up temporary files
+          rm -rf /tmp/etf-deploy.zip /tmp/etf-main
           
           # Navigate back to application directory
           cd /home/gulf-restaurant/htdocs/www.gulf-restaurant.com
           
           # Verify files were copied correctly
           if [ ! -f "package.json" ]; then
-            echo "❌ package.json not found after cloning! Deployment failed."
+            echo "❌ package.json not found after download! Deployment failed."
+            echo "📋 Listing directory contents for debugging:"
+            ls -la /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
             exit 1
           fi
           
-          echo "✅ Repository cloned successfully"
+          echo "✅ Repository downloaded and extracted successfully"
           
           # Install dependencies
           echo "📦 Installing dependencies..."

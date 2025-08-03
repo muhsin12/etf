@@ -18,14 +18,15 @@ The VPS deployment was failing due to several critical issues:
 
 ## Solutions Implemented
 
-### 1. Fresh Clone Approach
-- **Before**: Used incremental git pull/fetch operations that could fail due to authentication or state issues
-- **After**: Implemented fresh clone approach using public repository access
+### 1. ZIP Download Approach
+- **Before**: Used git clone operations that required authentication and could fail
+- **After**: Implemented ZIP download approach that requires no authentication
 
 ```bash
-# Clean deployment approach
-git clone https://github.com/muhsin12/etf.git /tmp/etf-deploy
-cp -r /tmp/etf-deploy/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
+# Download and extract approach (no authentication required)
+curl -L -o /tmp/etf-deploy.zip https://github.com/muhsin12/etf/archive/refs/heads/main.zip
+cd /tmp && unzip -q etf-deploy.zip
+cp -r /tmp/etf-main/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
 ```
 
 ### 2. Improved Error Handling
@@ -47,11 +48,12 @@ cp -r /tmp/etf-deploy/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
 
 ### `.github/workflows/vps-deploy.yml`
 
-1. **Replaced Git Authentication Logic**:
+1. **Replaced Git Clone with ZIP Download**:
    ```yaml
-   # OLD: Complex git init/fetch/pull logic with authentication issues
-   # NEW: Simple public clone approach
-   git clone https://github.com/muhsin12/etf.git /tmp/etf-deploy
+   # OLD: Git clone with authentication issues
+   # NEW: Direct ZIP download (no authentication needed)
+   curl -L -o /tmp/etf-deploy.zip https://github.com/muhsin12/etf/archive/refs/heads/main.zip
+   cd /tmp && unzip -q etf-deploy.zip
    ```
 
 2. **Added File Verification**:
@@ -79,11 +81,12 @@ cp -r /tmp/etf-deploy/* /home/gulf-restaurant/htdocs/www.gulf-restaurant.com/
 
 ## Benefits of New Approach
 
-1. **Reliability**: Fresh clone eliminates git state corruption issues
-2. **Simplicity**: No complex git authentication setup required
-3. **Consistency**: Each deployment starts with a clean state
+1. **No Authentication Required**: ZIP download eliminates all git authentication issues
+2. **Simplicity**: Single curl command downloads the entire repository
+3. **Consistency**: Each deployment gets the exact same files from the main branch
 4. **Error Recovery**: Better error handling and verification steps
 5. **Maintainability**: Easier to debug and troubleshoot
+6. **Reliability**: No dependency on git configuration or SSH keys
 
 ## Testing Recommendations
 
