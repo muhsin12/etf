@@ -1,139 +1,126 @@
 # MMP Garage - Second-Hand Car Sales Website
 
-A modern web application for MMP Garage's second-hand car sales business, built with Next.js, TypeScript, Tailwind CSS, and MongoDB.
+A modern, responsive web application for MMP Garage's second-hand car sales business. Built with Next.js 15, TypeScript, and MongoDB.
 
-## Features
+## 🌐 Live Website
+Visit us at: [https://www.gulf-restaurant.com](https://www.gulf-restaurant.com)
 
-- **Car Listings**: Browse available cars with detailed information and images
-- **Advanced Filtering**: Filter cars by make, model, year, price, mileage, and more
-- **Car Details**: View comprehensive information about each car
-- **Enquiry System**: Submit enquiries about specific cars
-- **Admin Dashboard**: Manage car listings and handle customer enquiries
-- **Image Management**: Upload and manage multiple car images (local storage in development, Azure Blob Storage in production)
-- **Responsive Design**: Mobile-friendly interface
+## ✨ Features
 
-## Tech Stack
+- **Car Listings**: Browse and search through available vehicles
+- **Admin Dashboard**: Manage car inventory, view enquiries
+- **Contact System**: Customer enquiry management
+- **Responsive Design**: Mobile-first approach with modern UI
+- **Image Management**: Local storage for development, optimized for production
+- **SEO Optimized**: Built-in SEO features for better search visibility
 
-- **Frontend**: Next.js 13+, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: MongoDB with Mongoose
-- **Image Storage**: 
-  - Development: Local file system
-  - Production: Azure Blob Storage
-- **Authentication**: JWT with HTTP-only cookies
-- **Styling**: Tailwind CSS
+## 🚀 Deployment
 
-## Prerequisites
+### VPS Deployment (Production)
 
-- Node.js 16.8 or later
-- MongoDB instance
-- Azure Storage account and container (for production)
-- Git
+The application is configured for deployment to a VPS with automatic GitHub Actions workflow.
 
-## Setup Instructions
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd etf
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Environment Setup**
-   - Copy the example environment file:
-     ```bash
-     cp env.example .env.local
-     ```
-   - Update the `.env.local` file with your configuration values
-
-## Image Storage Configuration
-
-### Development Mode
-
-In development mode, images are stored locally in the `/public/uploads` directory. These images are accessible via the `/uploads` URL path.
-
-### Production Mode
-
-In production, images are stored in Azure Blob Storage. You need to configure the following environment variables:
-
-- `AZURE_STORAGE_CONNECTION_STRING`: Your Azure Storage connection string
-- `AZURE_STORAGE_CONTAINER_NAME`: The name of your Azure Storage container (defaults to 'cars')
-
-## Running the Application
-
-### Development
-
+#### Quick Deploy
 ```bash
+npm run deploy:vps
+```
+
+#### GitHub Actions Deployment
+1. Set up GitHub secrets (see [GitHub Secrets Setup](docs/github-secrets-setup.md))
+2. Push to `main` branch for automatic deployment
+3. Monitor deployment in GitHub Actions tab
+
+#### Manual VPS Setup
+See detailed instructions in [VPS Deployment Guide](docs/vps-deployment-guide.md)
+
+## 🛠️ Development
+
+### Prerequisites
+- Node.js 18+
+- MongoDB
+- npm or yarn
+
+### Local Setup
+```bash
+# Clone the repository
+git clone <repository-url>
+cd etf
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp env.example .env
+# Edit .env with your local configuration
+
+# Start development server
 npm run dev
 ```
 
-The application will be available at http://localhost:3000
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run clean` - Clean build artifacts and reinstall dependencies
+- `npm run deploy:vps` - Deploy to VPS
 
-### Production Build
+## 📁 Project Structure
 
-```bash
-npm run build
-npm start
+```
+src/
+├── app/                 # Next.js 15 App Router
+│   ├── admin/          # Admin dashboard pages
+│   ├── api/            # API routes
+│   ├── cars/           # Car listing pages
+│   ├── contact/        # Contact page
+│   └── about/          # About page
+├── components/         # Reusable React components
+├── lib/               # Utility libraries
+├── models/            # MongoDB/Mongoose models
+└── styles/            # CSS styles
 ```
 
-## Admin Access
+## 🔧 Configuration
 
-To access the admin dashboard, navigate to `/admin` and log in with the credentials specified in your `.env` file.
+### Environment Variables
+```bash
+NODE_ENV=production
+MONGODB_URI=mongodb://localhost:27017/mmp_garage
+ADMIN_EMAIL=admin@gulf-restaurant.com
+ADMIN_PASSWORD=your_secure_password
+JWT_SECRET=your_jwt_secret
+NEXT_PUBLIC_API_URL=https://www.gulf-restaurant.com
+```
 
-## Deployment
+### Image Storage
+- **Development**: Files stored in `public/uploads/`
+- **Production**: Optimized for VPS deployment
 
-### Azure Deployment Pipeline
+## 📚 Documentation
 
-This project is configured with a GitHub Actions workflow to automatically deploy to Azure App Service and use Azure Storage for image storage.
+- [VPS Deployment Guide](docs/vps-deployment-guide.md)
+- [GitHub Secrets Setup](docs/github-secrets-setup.md)
 
-#### Prerequisites for Deployment
+## 🔒 Security
 
-1. **Azure Resources**:
-   - Azure App Service plan and App Service
-   - Azure Storage account with a blob container
+- JWT-based authentication for admin access
+- Environment-based configuration
+- Secure file upload handling
+- Input validation and sanitization
 
-2. **GitHub Secrets**:
-   - `AZURE_WEBAPP_PUBLISH_PROFILE`: The publish profile from your Azure App Service
-   - `MONGODB_URI`: Your production MongoDB connection string
-   - `AZURE_STORAGE_CONNECTION_STRING`: Your Azure Storage connection string
-   - `AZURE_STORAGE_CONTAINER_NAME`: Your Azure Storage container name
-   - `ADMIN_EMAIL`: Admin email for the production environment
-   - `ADMIN_PASSWORD`: Admin password for the production environment
-   - `JWT_SECRET`: JWT secret for authentication
-   - `NEXT_PUBLIC_API_URL`: The URL of your deployed application
+## 🤝 Contributing
 
-#### Deployment Process
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-The deployment process is automated through GitHub Actions:
+## 📄 License
 
-1. Push changes to the `main` branch
-2. GitHub Actions workflow builds the application
-3. The built application is deployed to Azure App Service
-4. Images are stored in Azure Blob Storage
+This project is proprietary software for MMP Garage.
 
-#### Configuring Existing Azure Resources
+## 📞 Support
 
-If you already have Azure resources created, you can use the provided script to configure them for deployment:
-
-1. Edit the configuration script with your resource names:
-   ```bash
-   # Open and edit the script with your resource names
-   nano scripts/configure-existing-azure.sh
-   ```
-
-2. Run the configuration script:
-   ```bash
-   ./scripts/configure-existing-azure.sh
-   ```
-
-3. Follow the instructions to set up GitHub secrets
-
-For detailed instructions, see the [Azure Deployment Guide](docs/azure-deployment-guide.md).
-
-## License
-
-[MIT](LICENSE)
+For technical support or questions, contact the development team.
