@@ -1,0 +1,692 @@
+[
+  {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2022,
+    "price": 28000,
+    "mileage": 15000,
+    "engineSize": "2.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Silver",
+    "description": "A reliable and fuel-efficient sedan, perfect for families and daily commuting.",
+    "features": ["Apple CarPlay", "Android Auto", "Lane Keeping Assist", "Adaptive Cruise Control"],
+    "images": [
+      {
+        "url": "/uploads/car1.svg",
+        "key": "car1.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-TM-CAM-001"
+  },
+  {
+    "make": "Honda",
+    "model": "CR-V",
+    "year": 2021,
+    "price": 32000,
+    "mileage": 22000,
+    "engineSize": "1.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Blue",
+    "description": "Versatile and spacious SUV with great safety ratings and a comfortable ride.",
+    "features": ["Sunroof", "Heated Seats", "Blind Spot Monitoring", "Power Tailgate"],
+    "images": [
+      {
+        "url": "/uploads/car2.svg",
+        "key": "car2.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "SUV",
+    "registrationYear": 2021,
+    "vin": "VIN-HN-CRV-002"
+  },
+  {
+    "make": "Ford",
+    "model": "Mustang",
+    "year": 2023,
+    "price": 45000,
+    "mileage": 5000,
+    "engineSize": "5.0L",
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "color": "Red",
+    "description": "Iconic American muscle car with thrilling performance and aggressive styling.",
+    "features": ["Performance Exhaust", "Leather Seats", "Brembo Brakes", "Digital Instrument Cluster"],
+    "images": [
+      {
+        "url": "/uploads/car3.svg",
+        "key": "car3.svg"
+      }
+    ],
+    "condition": "New",
+    "bodyType": "Coupe",
+    "registrationYear": 2023,
+    "vin": "VIN-FD-MST-003"
+  },
+  {
+    "make": "BMW",
+    "model": "X5",
+    "year": 2020,
+    "price": 55000,
+    "mileage": 30000,
+    "engineSize": "3.0L",
+    "fuelType": "Diesel",
+    "transmission": "Automatic",
+    "color": "Black",
+    "description": "Luxury SUV that combines comfort, technology, and driving pleasure.",
+    "features": ["Panoramic Sunroof", "Harman Kardon Sound System", "Heads-Up Display", "360-degree Camera"],
+    "images": [
+      {
+        "url": "/uploads/car4.svg",
+        "key": "car4.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "SUV",
+    "registrationYear": 2020,
+    "vin": "VIN-BW-X5-004"
+  },
+  {
+    "make": "Chevrolet",
+    "model": "Silverado",
+    "year": 2021,
+    "price": 48000,
+    "mileage": 40000,
+    "engineSize": "5.3L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "White",
+    "description": "A robust and capable full-size pickup truck for work and play.",
+    "features": ["Towing Package", "Bed Liner", "Apple CarPlay", "Off-Road Suspension"],
+    "images": [
+      {
+        "url": "/uploads/car5.svg",
+        "key": "car5.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Truck",
+    "registrationYear": 2021,
+    "vin": "VIN-CV-SIL-005"
+  },
+  {
+    "make": "Nissan",
+    "model": "Altima",
+    "year": 2022,
+    "price": 26000,
+    "mileage": 18000,
+    "engineSize": "2.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Gray",
+    "description": "Comfortable mid-size sedan with a smooth ride and modern features.",
+    "features": ["Remote Start", "Blind Spot Warning", "Bose Audio", "Heated Steering Wheel"],
+    "images": [
+      {
+        "url": "/uploads/car6.svg",
+        "key": "car6.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-NS-ALT-006"
+  },
+  {
+    "make": "Hyundai",
+    "model": "Tucson",
+    "year": 2023,
+    "price": 30000,
+    "mileage": 10000,
+    "engineSize": "1.6L",
+    "fuelType": "Hybrid",
+    "transmission": "Automatic",
+    "color": "Red",
+    "description": "Stylish and efficient compact SUV with a cutting-edge design and technology.",
+    "features": ["Digital Key", "Wireless Charging", "Highway Driving Assist", "Panoramic Sunroof"],
+    "images": [
+      {
+        "url": "/uploads/car7.svg",
+        "key": "car7.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "SUV",
+    "registrationYear": 2023,
+    "vin": "VIN-HY-TCS-007"
+  },
+  {
+    "make": "Kia",
+    "model": "Seltos",
+    "year": 2021,
+    "price": 24000,
+    "mileage": 25000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Orange",
+    "description": "A practical and stylish subcompact SUV with plenty of personality.",
+    "features": ["10.25-inch Touchscreen", "LED Headlights", "Sunroof", "Automatic Climate Control"],
+    "images": [
+      {
+        "url": "/uploads/car8.svg",
+        "key": "car8.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "SUV",
+    "registrationYear": 2021,
+    "vin": "VIN-KA-SEL-008"
+  },
+  {
+    "make": "Volkswagen",
+    "model": "Golf",
+    "year": 2020,
+    "price": 23000,
+    "mileage": 35000,
+    "engineSize": "1.4L",
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "color": "Black",
+    "description": "Fun-to-drive hatchback known for its refined handling and premium interior.",
+    "features": ["Heated Windshield", "Fender Audio", "Adaptive Cruise Control", "Rain-Sensing Wipers"],
+    "images": [
+      {
+        "url": "/uploads/car9.svg",
+        "key": "car9.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Hatchback",
+    "registrationYear": 2020,
+    "vin": "VIN-VW-GLF-009"
+  },
+  {
+    "make": "Audi",
+    "model": "A4",
+    "year": 2022,
+    "price": 42000,
+    "mileage": 12000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "White",
+    "description": "Sophisticated luxury sedan with a high-tech cabin and a smooth, powerful ride.",
+    "features": ["Virtual Cockpit", "Bang & Olufsen Sound", "Matrix LED Headlights", "Leather Upholstery"],
+    "images": [
+      {
+        "url": "/uploads/car10.svg",
+        "key": "car10.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-AD-A4-010"
+  },
+  {
+    "make": "Mercedes-Benz",
+    "model": "C-Class",
+    "year": 2021,
+    "price": 48000,
+    "mileage": 20000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Silver",
+    "description": "The benchmark for luxury compact sedans, offering elegance and advanced technology.",
+    "features": ["MBUX Infotainment", "Burmester Surround Sound", "Air Suspension", "Ambient Lighting"],
+    "images": [
+      {
+        "url": "/uploads/car11.svg",
+        "key": "car11.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2021,
+    "vin": "VIN-MB-CCL-011"
+  },
+  {
+    "make": "Toyota",
+    "model": "RAV4",
+    "year": 2023,
+    "price": 35000,
+    "mileage": 8000,
+    "engineSize": "2.5L",
+    "fuelType": "Hybrid",
+    "transmission": "Automatic",
+    "color": "Blue",
+    "description": "Top-selling compact SUV known for its reliability, efficiency, and practicality.",
+    "features": ["Toyota Safety Sense 2.5", "Moonroof", "JBL Audio System", "All-Wheel Drive"],
+    "images": [
+      {
+        "url": "/uploads/car12.svg",
+        "key": "car12.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "SUV",
+    "registrationYear": 2023,
+    "vin": "VIN-TM-RAV-012"
+  },
+  {
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2022,
+    "price": 24000,
+    "mileage": 16000,
+    "engineSize": "1.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Gray",
+    "description": "A leader in the compact car segment, offering a fun driving experience and great value.",
+    "features": ["Honda Sensing", "Apple CarPlay", "Sunroof", "Sport Mode"],
+    "images": [
+      {
+        "url": "/uploads/car13.svg",
+        "key": "car13.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-HN-CIV-013"
+  },
+  {
+    "make": "Ford",
+    "model": "Explorer",
+    "year": 2021,
+    "price": 40000,
+    "mileage": 28000,
+    "engineSize": "3.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Black",
+    "description": "Family-friendly three-row SUV with a powerful engine and comfortable interior.",
+    "features": ["Third-Row Seating", "Twin-Panel Moonroof", "B&O Sound System", "Ford Co-Pilot360"],
+    "images": [
+      {
+        "url": "/uploads/car14.svg",
+        "key": "car14.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "SUV",
+    "registrationYear": 2021,
+    "vin": "VIN-FD-EXP-014"
+  },
+  {
+    "make": "Chevrolet",
+    "model": "Equinox",
+    "year": 2022,
+    "price": 29000,
+    "mileage": 19000,
+    "engineSize": "1.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Red",
+    "description": "A well-rounded compact SUV with a user-friendly infotainment system.",
+    "features": ["Chevy Safety Assist", "Heated Seats", "Power Liftgate", "Remote Start"],
+    "images": [
+      {
+        "url": "/uploads/car15.svg",
+        "key": "car15.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "SUV",
+    "registrationYear": 2022,
+    "vin": "VIN-CV-EQX-015"
+  },
+  {
+    "make": "Nissan",
+    "model": "Rogue",
+    "year": 2023,
+    "price": 31000,
+    "mileage": 9000,
+    "engineSize": "2.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "White",
+    "description": "Comfort-focused SUV with a premium-feeling interior and ProPILOT Assist.",
+    "features": ["ProPILOT Assist", "Quilted Leather Seats", "Panoramic Moonroof", "Motion-Activated Liftgate"],
+    "images": [
+      {
+        "url": "/uploads/car16.svg",
+        "key": "car16.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "SUV",
+    "registrationYear": 2023,
+    "vin": "VIN-NS-ROG-016"
+  },
+  {
+    "make": "Hyundai",
+    "model": "Elantra",
+    "year": 2021,
+    "price": 22000,
+    "mileage": 27000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Silver",
+    "description": "Boldly styled compact sedan with a wealth of standard tech features.",
+    "features": ["Wireless Apple CarPlay", "Dual 10.25-inch displays", "Forward Collision-Avoidance Assist"],
+    "images": [
+      {
+        "url": "/uploads/car17.svg",
+        "key": "car17.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Sedan",
+    "registrationYear": 2021,
+    "vin": "VIN-HY-ELA-017"
+  },
+  {
+    "make": "Kia",
+    "model": "Forte",
+    "year": 2022,
+    "price": 21000,
+    "mileage": 21000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Blue",
+    "description": "Feature-packed compact sedan that offers excellent value for the money.",
+    "features": ["Lane Following Assist", "Wireless Phone Charger", "Harman Kardon Audio", "Sunroof"],
+    "images": [
+      {
+        "url": "/uploads/car18.svg",
+        "key": "car18.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-KA-FOR-018"
+  },
+  {
+    "make": "Volkswagen",
+    "model": "Jetta",
+    "year": 2020,
+    "price": 20000,
+    "mileage": 40000,
+    "engineSize": "1.4L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Black",
+    "description": "A comfortable and spacious compact sedan with conservative styling.",
+    "features": ["Heated Front Seats", "VW Digital Cockpit", "BeatsAudio", "Sunroof"],
+    "images": [
+      {
+        "url": "/uploads/car19.svg",
+        "key": "car19.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Sedan",
+    "registrationYear": 2020,
+    "vin": "VIN-VW-JET-019"
+  },
+  {
+    "make": "Audi",
+    "model": "Q5",
+    "year": 2021,
+    "price": 46000,
+    "mileage": 23000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Gray",
+    "description": "Premium compact SUV that blends performance, comfort, and technology seamlessly.",
+    "features": ["Quattro All-Wheel Drive", "Virtual Cockpit Plus", "Panoramic Sunroof", "Adaptive Cruise Assist"],
+    "images": [
+      {
+        "url": "/uploads/car20.svg",
+        "key": "car20.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "SUV",
+    "registrationYear": 2021,
+    "vin": "VIN-AD-Q5-020"
+  },
+  {
+    "make": "Mercedes-Benz",
+    "model": "GLC",
+    "year": 2022,
+    "price": 52000,
+    "mileage": 17000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "White",
+    "description": "A luxury SUV that offers a refined ride and an impeccably crafted interior.",
+    "features": ["Heated and Ventilated Seats", "Burmester 3D Surround Sound", "Augmented Reality Navigation"],
+    "images": [
+      {
+        "url": "/uploads/car21.svg",
+        "key": "car21.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "SUV",
+    "registrationYear": 2022,
+    "vin": "VIN-MB-GLC-021"
+  },
+  {
+    "make": "BMW",
+    "model": "3 Series",
+    "year": 2023,
+    "price": 48000,
+    "mileage": 7000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Blue",
+    "description": "The quintessential sports sedan, delivering unmatched driving dynamics.",
+    "features": ["iDrive 8 Infotainment", "Live Cockpit Professional", "Driving Assistance Professional Package"],
+    "images": [
+      {
+        "url": "/uploads/car22.svg",
+        "key": "car22.svg"
+      }
+    ],
+    "condition": "New",
+    "bodyType": "Sedan",
+    "registrationYear": 2023,
+    "vin": "VIN-BW-3S-022"
+  },
+  {
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2020,
+    "price": 21000,
+    "mileage": 38000,
+    "engineSize": "1.8L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Red",
+    "description": "World-renowned for its reliability, durability, and excellent resale value.",
+    "features": ["Toyota Safety Sense 2.0", "Apple CarPlay", "Automatic Climate Control"],
+    "images": [
+      {
+        "url": "/uploads/car23.svg",
+        "key": "car23.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Sedan",
+    "registrationYear": 2020,
+    "vin": "VIN-TM-COR-023"
+  },
+  {
+    "make": "Honda",
+    "model": "Accord",
+    "year": 2021,
+    "price": 29000,
+    "mileage": 24000,
+    "engineSize": "2.0L",
+    "fuelType": "Hybrid",
+    "transmission": "Automatic",
+    "color": "Black",
+    "description": "A stylish and sophisticated midsize sedan with a powerful yet efficient hybrid powertrain.",
+    "features": ["Honda Sensing Suite", "Heads-Up Display", "Wireless Charging", "Leather Trim"],
+    "images": [
+      {
+        "url": "/uploads/car24.svg",
+        "key": "car24.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2021,
+    "vin": "VIN-HN-ACC-024"
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price": 18000,
+    "mileage": 55000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Silver",
+    "description": "A compact and agile hatchback that's enjoyable to drive in the city.",
+    "features": ["Ford SYNC 3", "Rearview Camera", "Keyless Entry"],
+    "images": [
+      {
+        "url": "/uploads/car25.svg",
+        "key": "car25.svg"
+      }
+    ],
+    "condition": "Fair",
+    "bodyType": "Hatchback",
+    "registrationYear": 2019,
+    "vin": "VIN-FD-FOC-025"
+  },
+  {
+    "make": "Chevrolet",
+    "model": "Malibu",
+    "year": 2021,
+    "price": 25000,
+    "mileage": 32000,
+    "engineSize": "1.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Gray",
+    "description": "A comfortable and handsome midsize sedan with a quiet cabin.",
+    "features": ["Teen Driver Technology", "Wireless Apple CarPlay", "OnStar"],
+    "images": [
+      {
+        "url": "/uploads/car26.svg",
+        "key": "car26.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Sedan",
+    "registrationYear": 2021,
+    "vin": "VIN-CV-MAL-026"
+  },
+  {
+    "make": "Nissan",
+    "model": "Sentra",
+    "year": 2022,
+    "price": 23000,
+    "mileage": 20000,
+    "engineSize": "2.0L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "White",
+    "description": "Sharp-looking compact sedan with a comfortable ride and standard safety features.",
+    "features": ["Nissan Safety Shield 360", "Zero Gravity Seats", "Intelligent Cruise Control"],
+    "images": [
+      {
+        "url": "/uploads/car27.svg",
+        "key": "car27.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-NS-SEN-027"
+  },
+  {
+    "make": "Hyundai",
+    "model": "Sonata",
+    "year": 2023,
+    "price": 28000,
+    "mileage": 11000,
+    "engineSize": "2.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Blue",
+    "description": "A midsize sedan that stands out with its dramatic styling and high-tech features.",
+    "features": ["Remote Smart Parking Assist", "Bose Premium Audio", "Digital Key"],
+    "images": [
+      {
+        "url": "/uploads/car28.svg",
+        "key": "car28.svg"
+      }
+    ],
+    "condition": "Like New",
+    "bodyType": "Sedan",
+    "registrationYear": 2023,
+    "vin": "VIN-HY-SON-028"
+  },
+  {
+    "make": "Tesla",
+    "model": "Model 3",
+    "year": 2022,
+    "price": 40000,
+    "mileage": 25000,
+    "engineSize": "N/A",
+    "fuelType": "Electric",
+    "transmission": "Automatic",
+    "color": "Black",
+    "description": "The benchmark for electric vehicles, offering long range, rapid acceleration, and Autopilot.",
+    "features": ["Autopilot", "15-inch Touchscreen", "Glass Roof", "Sentry Mode"],
+    "images": [
+      {
+        "url": "/uploads/car29.svg",
+        "key": "car29.svg"
+      }
+    ],
+    "condition": "Excellent",
+    "bodyType": "Sedan",
+    "registrationYear": 2022,
+    "vin": "VIN-TS-M3-029"
+  },
+  {
+    "make": "Subaru",
+    "model": "Outback",
+    "year": 2021,
+    "price": 33000,
+    "mileage": 30000,
+    "engineSize": "2.5L",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "color": "Green",
+    "description": "A rugged and versatile wagon/SUV crossover with standard all-wheel drive.",
+    "features": ["Symmetrical All-Wheel Drive", "EyeSight Driver Assist", "STARLINK Multimedia", "Raised Roof Rails"],
+    "images": [
+      {
+        "url": "/uploads/car30.svg",
+        "key": "car30.svg"
+      }
+    ],
+    "condition": "Good",
+    "bodyType": "Wagon",
+    "registrationYear": 2021,
+    "vin": "VIN-SB-OBK-030"
+  }
+] 

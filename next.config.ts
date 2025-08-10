@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
         pathname: '/**', // Allow any path within the hostname
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

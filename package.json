@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "node_modules/next/dist/bin/next start",
+    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev -p 3002",
+    "build": "NODE_TLS_REJECT_UNAUTHORIZED=0 next build",
+    "start": "node_modules/next/dist/bin/next start -p 3002",
     "lint": "next lint",
-    "azure-deploy": "next build && next start"
+    "azure-deploy": "NODE_TLS_REJECT_UNAUTHORIZED=0 next build && next start"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.27.0",

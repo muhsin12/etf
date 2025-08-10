@@ -18,6 +18,19 @@ interface CarFilters {
   bodyType?: string;
 }
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -60,12 +73,12 @@ export async function GET(req: NextRequest) {
     await connectDB();
     const cars = await Car.find(filters).sort({ createdAt: -1 });
 
-    return NextResponse.json(cars);
+    return NextResponse.json(cars, { headers: corsHeaders });
   } catch (error) {
     console.error('Failed to fetch cars:', error);
     return NextResponse.json(
       { error: 'Failed to fetch cars' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
@@ -97,12 +110,12 @@ export async function POST(req: NextRequest) {
     const car = new Car(data);
     await car.save();
 
-    return NextResponse.json(car, { status: 201 });
+    return NextResponse.json(car, { status: 201, headers: corsHeaders });
   } catch (error) {
     console.error('Failed to create car listing:', error);
     return NextResponse.json(
       { error: 'Failed to create car listing' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
